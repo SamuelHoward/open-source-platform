@@ -2,9 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href={{ url_for('static', filename= 'css/style.css') }}>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
     <title>Open Source Platform</title>
   </head>
   <body>
+    <h1>
+      <span class="circle invis"></span>
+      <span class="circle center"></span>
+      <span class="circle outer"></span>
+    </h1>
+    <h1>
+      <span class="circle outer"></span>
+      <span class="circle center"></span>
+      <i class="osp-title">The Open Source Platform</i>
+    </h1>
+    <br />
+    An online platform for finding open source projects
+    <hr>
     {% block content %}{% endblock %} <br>
     <a href= {{ url_for('index') }}>Home Page</a>
   </body>

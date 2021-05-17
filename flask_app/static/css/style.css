@@ -1,0 +1,39 @@
+body {
+    background-color: #CAF0F8;
+    font-family: 'Jost', sans-serif;
+    margin: 60px;
+}
+
+h1 {
+    margin: -.22em;
+}
+
+hr {
+    background-color: black;
+    margin-top: 1em;
+}
+
+.osp-title {
+    margin-left: 0.5em;
+}
+
+.invis {
+    background-color: #CAF0F8;
+}
+
+.center {
+    background-color: #03045E;
+}
+
+.outer {
+    background-color: #023E8A;
+}
+
+.circle {
+    height: 1.5em;
+    width: 1.5em;
+    border-radius: 50%;
+    margin: -.17em;
+    margin-bottom: 0em;
+    display:inline-block;
+}
