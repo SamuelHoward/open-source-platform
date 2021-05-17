@@ -5,5 +5,4 @@ from flask_app.models import *
 @app.route('/')
 @app.route('/index')
 def index():
-    return str(Projects.query.all())
-    # return render_template('index.html', title='Front page')
+    return render_template('projects.html', projects=Projects.query.all())
