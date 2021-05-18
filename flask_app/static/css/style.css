@@ -18,7 +18,18 @@ div {
     margin-left: 16px;
 }
 
+a {
+    color: #03045E;
+    text-decoration: none;
+}
+
+.source {
+    float: right;
+    margin-right: 20px;
+}
+
 .project-card {
+    background-color: #ADE8F4;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     border-radius: 25px;
@@ -32,6 +43,10 @@ div {
 
 .project-card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.4);
+}
+
+.project-text {
+    height: 12.5em;
 }
 
 .main-body {
