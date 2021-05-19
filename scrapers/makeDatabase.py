@@ -13,7 +13,7 @@ newRecords = 0
 oldRecords = 0
 
 # Connect to a local database
-db = sqlite3.connect('projects.db')
+db = sqlite3.connect('new_projects.db')
 cur = db.cursor()
 
 # Temp: Drop the pre-existing database
@@ -22,7 +22,8 @@ cur = db.cursor()
 # Create the database
 cur.execute('''CREATE TABLE IF NOT EXISTS Projects(
                name TEXT PRIMARY KEY, url TEXT, 
-               description TEXT, source TEXT
+               description TEXT, source TEXT,
+               owner TEXT
                )''')
 
 # Scrape for projects

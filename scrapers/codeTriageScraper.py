@@ -31,14 +31,17 @@ def codeTriageScrape(pageLimit):
             # Extract the project name, description, and url
             name = pc.find_all("h3")[0].text.strip()
             description = pc.find_all("p")[0].text.strip()
-            url = "https://www.codetriage.com" + pc.find_all("a")[0].get('href')
-
+            urlSuffix = pc.find_all("a")[0].get('href')
+            url = "https://www.codetriage.com" + urlSuffix
+            owner = urlSuffix[1:urlSuffix[1:].find('/')+1]
+            
             # Store those values in a dictionary
             objDict = {
                 "name": name,
                 "url": url,
                 "description": description,
-                "source": "codeTriage"
+                "source": "codeTriage",
+                "owner": owner,
             }
         
             # Append JSON dictionary to list

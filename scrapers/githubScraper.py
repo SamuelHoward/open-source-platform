@@ -24,7 +24,8 @@ def githubScrape(pageLimit):
                 "name": item["name"],
                 "url": item["html_url"],
                 "description": item["description"],
-                "source": "github"
+                "source": "github",
+                "owner": item["owner"]["login"],
             }
 
             # Append JSON dictionary to list

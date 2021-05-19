@@ -39,13 +39,16 @@ def upForGrabsScrape():
         name = nameAndURL.text.strip()
         url = nameAndURL.get('href')
         description = pc.find_all("span", {"class": "desc"})[0].text.strip()
-            
+        labelLink = pc.find_all("p", {"class": "label"})[0].find_all("a")[0].get('href')
+        owner = labelLink[19:labelLink[19:].find('/')+19]
+        
         # Form disctionary representing JSON object
         objDict = {
             "name": name,
             "url": url,
             "description": description,
-            "source": "up-for-grabs"
+            "source": "up-for-grabs",
+            "owner": owner,
         }
         
         # Append JSON dictionary to list

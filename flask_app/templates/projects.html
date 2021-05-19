@@ -8,6 +8,9 @@
       <a  href={{ project.url }}><h3>{{ project.name }}</h3></a>
       <h4> {{ project.description }}</h4>
     </div>
+    {% if project.owner is not none %}
+    <b>{{ project.owner }}</b>
+    {% endif %}
     <b class="source">{{ project.source }}</b>
   </div>
 </div>
