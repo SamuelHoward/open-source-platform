@@ -12,6 +12,9 @@
     <b>{{ project.owner }}</b>
     {% endif %}
     <b class="source">{{ project.source }}</b>
+    {% if project.language is not none %}
+    <b class="source">{{ project.language }}</b>
+    {% endif %}
   </div>
 </div>
 {% endfor %}

@@ -13,7 +13,7 @@ newRecords = 0
 oldRecords = 0
 
 # Connect to a local database
-db = sqlite3.connect('new_projects.db')
+db = sqlite3.connect('projects.db')
 cur = db.cursor()
 
 # Temp: Drop the pre-existing database
@@ -23,15 +23,15 @@ cur = db.cursor()
 cur.execute('''CREATE TABLE IF NOT EXISTS Projects(
                name TEXT PRIMARY KEY, url TEXT, 
                description TEXT, source TEXT,
-               owner TEXT
+               owner TEXT, language TEXT
                )''')
 
 # Scrape for projects
 print("Begin scraping")
-projs = githubScraper.githubScrape(3)
+projs = githubScraper.githubScrape(6)
 projs += gitlabScraper.gitlabScrape()
 projs += openSourceGoogleScraper.openSourceGoogleScrape()
-projs += codeTriageScraper.codeTriageScrape(4)
+projs += codeTriageScraper.codeTriageScrape(8)
 projs += upForGrabsScraper.upForGrabsScrape()
 
 # Add each project to the SQLite database

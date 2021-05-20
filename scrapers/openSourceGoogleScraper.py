@@ -42,7 +42,7 @@ def openSourceGoogleScrape():
             "name": name,
             "url": url,
             "description": description,
-            "source": "open-source-google"
+            "source": "open-source-google",
         }
         
         # Append JSON dictionary to list

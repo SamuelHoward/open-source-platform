@@ -34,6 +34,7 @@ def codeTriageScrape(pageLimit):
             urlSuffix = pc.find_all("a")[0].get('href')
             url = "https://www.codetriage.com" + urlSuffix
             owner = urlSuffix[1:urlSuffix[1:].find('/')+1]
+            language = pc.get('data-language')
             
             # Store those values in a dictionary
             objDict = {
@@ -42,6 +43,7 @@ def codeTriageScrape(pageLimit):
                 "description": description,
                 "source": "codeTriage",
                 "owner": owner,
+                "language": language,
             }
         
             # Append JSON dictionary to list
