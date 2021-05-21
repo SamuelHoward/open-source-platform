@@ -63,3 +63,8 @@ for proj in projs:
 
 print("Total new records added to database: " + str(newRecords))
 print("Total existing records seen again: " + str(oldRecords))
+
+cur.execute('''CREATE TABLE Organizations 
+               AS SELECT DISTINCT owner 
+               FROM Projects
+               ''')

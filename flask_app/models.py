@@ -11,3 +11,10 @@ class Projects(db.Model):
     
     def __repr__(self):
         return 'Project: Name: %s URL: %s Description: %s Source: %s Owner: %s Language %s' % (self.name, self.url, self.description, self.source, self.owner, self.language)
+
+class Organizations(db.Model):
+
+    owner = db.Column(db.String(80), primary_key=True)
+    
+    def __repr__(self):
+        return 'Organization: Name: %s' % (self.owner)

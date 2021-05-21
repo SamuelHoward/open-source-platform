@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Organizations</h2>
+{% for organization in organizations %}
+<div class="project-card">
+  <div class="container">
+    <div class="project-text">
+      <h3>{{ organization.owner }}</h3>
+      <ul>
+      {% for project in projects %}
+      {% if project.owner == organization.owner %}
+      <li><a href={{ project.url }}>{{ project.name }}</a></li>
+      {% endif %}
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}
