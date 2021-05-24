@@ -23,6 +23,10 @@ a {
     text-decoration: none;
 }
 
+.pagination {
+    clear: both
+}
+
 .source {
     float: right;
     margin-right: 20px;

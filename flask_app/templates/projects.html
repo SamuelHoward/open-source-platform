@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Projects</h2>
-{% for project in projects %}
+{% for project in projects.items %}
 <div class="project-card">
   <div class="container">
     <div class="project-text">
@@ -18,4 +18,25 @@
   </div>
 </div>
 {% endfor %}
+
+<div class="pagination">
+  <a href={{ url_for('index', page=projects.prev_num) }}>
+    &laquo;
+  </a>
+  {% for page_num in projects.iter_pages(left_edge=2, left_current=1, right_current=2, right_edge=2) %}
+  {% if page_num %}
+    {% if page != projects.page %}
+    <a href={{ url_for('index', page=page_num) }}>{{ page_num }}</a>
+    {% else %}
+    <strong>{{ page_num }}</strong>
+    {% endif %}
+  {% else %}
+  …
+  {% endif %}
+  {% endfor %}
+  <a href={{ url_for('index', page=projects.next_num) }}>
+    &raquo;
+  </a>
+</div>
+
 {% endblock %}

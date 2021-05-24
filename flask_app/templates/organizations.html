@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Organizations</h2>
-{% for organization in organizations %}
+{% for organization in organizations.items %}
 <div class="project-card">
   <div class="container">
     <div class="project-text">
@@ -17,4 +17,25 @@
   </div>
 </div>
 {% endfor %}
+
+<div class="pagination">
+  <a href={{ url_for('organizations', page=organizations.prev_num) }}>
+    &laquo;
+  </a>
+  {% for page_num in organizations.iter_pages(left_edge=2, left_current=1, right_current=2, right_edge=2) %}
+  {% if page_num %}
+  {% if page != organizations.page %}
+  <a href={{ url_for('organizations', page=page_num) }}>{{ page_num }}</a>
+  {% else %}
+  <strong>{{ page_num }}</strong>
+  {% endif %}
+  {% else %}
+  …
+  {% endif %}
+  {% endfor %}
+  <a href={{ url_for('organizations', page=organizations.next_num) }}>
+    &raquo;
+  </a>
+  </div>
+
 {% endblock %}
