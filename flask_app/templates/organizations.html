@@ -5,10 +5,10 @@
 <div class="project-card">
   <div class="container">
     <div class="project-text">
-      <h3>{{ organization.owner }}</h3>
+      <h3><a href={{ organization.url }}>{{ organization.name }}</a></h3>
       <ul>
       {% for project in projects %}
-      {% if project.owner == organization.owner %}
+      {% if project.owner == organization.name %}
       <li><a href={{ project.url }}>{{ project.name }}</a></li>
       {% endif %}
       {% endfor %}

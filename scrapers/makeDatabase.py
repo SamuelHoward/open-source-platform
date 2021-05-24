@@ -64,7 +64,12 @@ for proj in projs:
 print("Total new records added to database: " + str(newRecords))
 print("Total existing records seen again: " + str(oldRecords))
 
-cur.execute('''CREATE TABLE Organizations 
-               AS SELECT DISTINCT owner 
+cur.execute('DROP TABLE IF EXISTS Organizations')
+cur.execute('''CREATE TABLE Organizations AS 
+               SELECT DISTINCT owner AS "name"
                FROM Projects
                ''')
+cur.execute('''ALTER TABLE Organizations
+               ADD COLUMN url TEXT''')
+cur.execute('''UPDATE Organizations SET url = "https://github.com/" || name''')
+db.commit()

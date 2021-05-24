@@ -14,7 +14,8 @@ class Projects(db.Model):
 
 class Organizations(db.Model):
 
-    owner = db.Column(db.String(80), primary_key=True)
+    name = db.Column(db.String(80), primary_key=True)
+    url = db.Column(db.String(100))
     
     def __repr__(self):
-        return 'Organization: Name: %s' % (self.owner)
+        return 'Organization: Name: %s URL: %s' % (self.name, self.url)
