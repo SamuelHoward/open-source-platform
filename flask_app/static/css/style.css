@@ -23,8 +23,14 @@ a {
     text-decoration: none;
 }
 
+.page-links {
+    float: right;
+}
+
 .pagination {
-    clear: both
+    clear: both;
+    text-align: center;
+    margin-left: -13%;
 }
 
 .source {

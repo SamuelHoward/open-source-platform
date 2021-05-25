@@ -22,9 +22,20 @@
     <br />
     An online platform for finding open source projects
     <hr>
+    <div>
+      <span class="page-links">
+	<a href= {{ url_for('index') }}>Projects</a>
+	&nbsp;&nbsp;&nbsp;&nbsp;
+	<a href= {{ url_for('organizations') }}>Organizations</a>
+      </span>
+    </div>
     <div class="main-body">
     {% block content %}{% endblock %} <br>
     </div>
-    <a href= {{ url_for('index') }}>Home</a>   <a href= {{ url_for('organizations') }}>Organizations</a>
+    <span class="page-links">
+      <a href= {{ url_for('index') }}>Projects</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <a href= {{ url_for('organizations') }}>Organizations</a>
+    </span>
   </body>
 </html>
