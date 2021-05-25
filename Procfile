@@ -1,1 +1,1 @@
-web: gunicorn app:flask_app/routes
+web:gunicorn app:flask_app/routes.py
