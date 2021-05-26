@@ -2,8 +2,6 @@ from flask_app import app, db
 from flask import render_template, request, redirect, url_for
 from flask_app.models import *
 
-app = Flask(__name__)
-
 @app.route('/')
 @app.route('/index')
 def index():
