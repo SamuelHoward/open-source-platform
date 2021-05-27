@@ -7,6 +7,8 @@ import gitlabScraper
 import openSourceGoogleScraper
 import codeTriageScraper
 import upForGrabsScraper
+import requests
+import json
 
 # Initialize some sounter variables
 newRecords = 0
@@ -23,16 +25,23 @@ cur = db.cursor()
 cur.execute('''CREATE TABLE IF NOT EXISTS Projects(
                name TEXT PRIMARY KEY, url TEXT, 
                description TEXT, source TEXT,
-               owner TEXT, language TEXT
+               owner TEXT, language TEXT,
+               owner_avatar TEXT
                )''')
 
 # Scrape for projects
 print("Begin scraping")
+print("Scrape github")
 projs = githubScraper.githubScrape(6)
+print("Scrape gitlab")
 projs += gitlabScraper.gitlabScrape()
+print("Scrape openSourceGoogle")
 projs += openSourceGoogleScraper.openSourceGoogleScrape()
+print("Scrape codeTriage")
 projs += codeTriageScraper.codeTriageScrape(8)
+print("Scrape upForGrabs")
 projs += upForGrabsScraper.upForGrabsScrape()
+print("Add records to Projects database")
 
 # Add each project to the SQLite database
 for proj in projs:
@@ -66,10 +75,28 @@ print("Total existing records seen again: " + str(oldRecords))
 
 cur.execute('DROP TABLE IF EXISTS Organizations')
 cur.execute('''CREATE TABLE Organizations AS 
-               SELECT DISTINCT owner AS "name"
+               SELECT DISTINCT owner AS "name", owner_avatar AS "avatar"
                FROM Projects
                ''')
 cur.execute('''ALTER TABLE Organizations
                ADD COLUMN url TEXT''')
 cur.execute('''UPDATE Organizations SET url = "https://github.com/" || name''')
 db.commit()
+
+#cur.execute("SELECT * FROM Organizations")
+#foundOrgRecords = cur.fetchall()
+
+#cur.execute('''ALTER TABLE Organizations
+#               ADD COLUMN avatar TEXT''')
+
+#for org in foundOrgRecords:
+
+#    result = requests.get("https://api.github.com/search/users?q=" + org[0]).json()
+#    print(org)
+#    print(result)
+
+#    if "items" in result:
+#        sql = "UPDATE Organizations SET avatar = " + json.dumps(result["items"][0]["avatar_url"]) + "  WHERE name = '" + org[0] + "'"
+#        print(sql)
+#        cur.execute(sql)
+#        db.commit()

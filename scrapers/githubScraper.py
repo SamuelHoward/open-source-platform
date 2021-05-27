@@ -26,6 +26,7 @@ def githubScrape(pageLimit):
                 "description": item["description"],
                 "source": "github",
                 "owner": item["owner"]["login"],
+                "owner_avatar": item["owner"]["avatar_url"],
                 "language": item["language"],
             }
 

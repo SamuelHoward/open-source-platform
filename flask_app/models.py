@@ -7,6 +7,7 @@ class Projects(db.Model):
     description = db.Column(db.String(500))
     source = db.Column(db.String(32))
     owner = db.Column(db.String(32))
+    owner_avatar = db.Column(db.String(100))
     language = db.Column(db.String(32))
     
     def __repr__(self):
@@ -16,6 +17,7 @@ class Organizations(db.Model):
 
     name = db.Column(db.String(80), primary_key=True)
     url = db.Column(db.String(100))
+    avatar = db.Column(db.String(100))
     
     def __repr__(self):
         return 'Organization: Name: %s URL: %s' % (self.name, self.url)
