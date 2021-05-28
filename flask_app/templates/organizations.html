@@ -7,7 +7,7 @@
     <div class="project-text">
       <h3><a href={{ organization.url }}>{{ organization.name }}</a></h3>
       {% if organization.avatar is not none %}
-      <img src={{ organization.avatar }} width="50">
+      <img src={{ organization.avatar }} width="80" class="org-pic">
       {% endif %}
       <ul>
       {% for project in projects %}

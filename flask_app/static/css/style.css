@@ -23,6 +23,16 @@ a {
     text-decoration: none;
 }
 
+.proj-org-pic {
+    float: left;
+    margin-right: 10px;
+}
+
+.org-pic {
+    float: right;
+    margin-right: 40px;
+}
+
 .page-links {
     float: right;
 }
