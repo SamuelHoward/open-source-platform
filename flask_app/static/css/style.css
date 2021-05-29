@@ -8,6 +8,10 @@ h1 {
     margin: -.22em;
 }
 
+h3 {
+    margin-bottom: 0px;
+}
+
 hr {
     background-color: black;
     margin-top: 1em;
@@ -21,6 +25,14 @@ div {
 a {
     color: #03045E;
     text-decoration: none;
+}
+
+input {
+    background-color: #ADE8F4;;
+}
+
+.search {
+    background-color: white;
 }
 
 .proj-org-pic {

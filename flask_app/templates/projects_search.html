@@ -1,14 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Search Projects</h2>
+<h2>Projects</h2>
+
+<h3>Search</h3>
 
 <form method="post">
-  <input type="text" name="Username"> <br>
-  <input type="submit" name="All" value="See all users">
+  <input class="search" type="text" name="search_term"> <br>
+  <input type="submit" name="All" value="See all Projects">
   <input type="submit" value="Submit">
 </form>
 
-{% for project in search_results %}
+{% if search_term != "" %}
+<h3>Search results for "{{ search_term }}":</h3>
+{% endif %}
+
+{% for project in search_results.items %}
 <div class="project-card">
   <div class="container">
     <div class="project-text">
@@ -28,5 +34,25 @@
   </div>
 </div>
 {% endfor %}
+
+<div class="pagination">
+  <a href={{ url_for('projects_search', page=search_results.prev_num) }}>
+    &laquo;
+  </a>
+  {% for page_num in search_results.iter_pages(left_edge=2, left_current=1, right_current=2, right_edge=2) %}
+  {% if page_num %}
+  {% if page != search_results.page %}
+  <a href={{ url_for('projects_search', page=page_num) }}>{{ page_num }}</a>
+  {% else %}
+  <strong>{{ page_num }}</strong>
+  {% endif %}
+  {% else %}
+  …
+  {% endif %}
+  {% endfor %}
+  <a href={{ url_for('projects_search', page=search_results.next_num) }}>
+    &raquo;
+  </a>
+</div>
 
 {% endblock %}
