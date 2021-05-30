@@ -10,7 +10,7 @@
   <input type="submit" value="Submit">
 </form>
 
-{% if search_term != "" %}
+{% if search_term != "" and search_term is not none %}
 <h3>Search results for "{{ search_term }}":</h3>
 {% endif %}
 
