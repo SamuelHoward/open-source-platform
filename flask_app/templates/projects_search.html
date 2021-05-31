@@ -2,13 +2,15 @@
 {% block content %}
 <h2>Projects</h2>
 
-<h3>Search</h3>
+<div class="search_section">
+  <h3>Search</h3>
 
-<form method="post">
-  <input class="search" type="text" name="search_term"> <br>
-  <input type="submit" name="All" value="See all Projects">
-  <input type="submit" value="Submit">
-</form>
+  <form method="post">
+    <input class="search" type="text" name="search_term"> 
+    <input type="submit" name="All" value="Clear Search Results">
+    <input type="submit" value="Search">
+  </form>
+</div>
 
 {% if search_term != "" and search_term is not none %}
 <h3>Search results for "{{ search_term }}":</h3>
