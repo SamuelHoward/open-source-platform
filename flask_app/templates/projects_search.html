@@ -6,9 +6,9 @@
   <h3>Search</h3>
 
   <form method="post">
-    <input class="search" type="text" name="search_term"> 
-    <input type="submit" name="All" value="Clear Search Results">
+    <input class="search" type="text" name="search_term">
     <input type="submit" value="Search">
+    <input type="submit" name="All" value="Clear Search Results">
   </form>
 </div>
 
@@ -38,13 +38,13 @@
 {% endfor %}
 
 <div class="pagination">
-  <a href={{ url_for('projects_search', page=search_results.prev_num) }}>
+  <a href={{ url_for('projects', page=search_results.prev_num) }}>
     &laquo;
   </a>
   {% for page_num in search_results.iter_pages(left_edge=2, left_current=1, right_current=2, right_edge=2) %}
   {% if page_num %}
   {% if page != search_results.page %}
-  <a href={{ url_for('projects_search', page=page_num) }}>{{ page_num }}</a>
+  <a href={{ url_for('projects', page=page_num) }}>{{ page_num }}</a>
   {% else %}
   <strong>{{ page_num }}</strong>
   {% endif %}
@@ -52,7 +52,7 @@
   …
   {% endif %}
   {% endfor %}
-  <a href={{ url_for('projects_search', page=search_results.next_num) }}>
+  <a href={{ url_for('projects', page=search_results.next_num) }}>
     &raquo;
   </a>
 </div>

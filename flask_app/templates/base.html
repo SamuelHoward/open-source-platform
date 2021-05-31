@@ -24,22 +24,18 @@
     <hr>
     <div>
       <span class="page-links">
-	<a href= {{ url_for('index') }}>Projects</a>
+	<a href= {{ url_for('projects') }}>Projects</a>
 	&nbsp;&nbsp;&nbsp;&nbsp;
 	<a href= {{ url_for('organizations') }}>Organizations</a>
-	&nbsp;&nbsp;&nbsp;&nbsp;
-	<a href= {{ url_for('projects_search') }}>Search</a>
       </span>
     </div>
     <div class="main-body">
     {% block content %}{% endblock %} <br>
     </div>
     <span class="page-links">
-      <a href= {{ url_for('index') }}>Projects</a>
+      <a href= {{ url_for('projects') }}>Projects</a>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <a href= {{ url_for('organizations') }}>Organizations</a>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <a href= {{ url_for('projects_search') }}>Search</a>
     </span>
   </body>
 </html>
