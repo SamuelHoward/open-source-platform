@@ -1,7 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Organizations</h2>
-{% for organization in organizations.items %}
+
+<div class="search_section">
+  <h3>Search</h3>
+
+  <form method="post">
+    <input class="search" type="text" name="search_term">
+    <input type="submit" value="Search">
+    <input type="submit" name="All" value="Clear Search Results">
+  </form>
+</div>
+
+{% if search_term != "" and search_term is not none %}
+<h3>Search results for "{{ search_term }}":</h3>
+{% endif %}
+
+{% for organization in search_results.items %}
 <div class="project-card">
   <div class="container">
     <div class="project-text">
@@ -22,12 +37,12 @@
 {% endfor %}
 
 <div class="pagination">
-  <a href={{ url_for('organizations', page=organizations.prev_num) }}>
+  <a href={{ url_for('organizations', page=search_results.prev_num) }}>
     &laquo;
   </a>
-  {% for page_num in organizations.iter_pages(left_edge=2, left_current=1, right_current=2, right_edge=2) %}
+  {% for page_num in search_results.iter_pages(left_edge=2, left_current=1, right_current=2, right_edge=2) %}
   {% if page_num %}
-  {% if page != organizations.page %}
+  {% if page != search_results.page %}
   <a href={{ url_for('organizations', page=page_num) }}>{{ page_num }}</a>
   {% else %}
   <strong>{{ page_num }}</strong>
@@ -36,7 +51,7 @@
   …
   {% endif %}
   {% endfor %}
-  <a href={{ url_for('organizations', page=organizations.next_num) }}>
+  <a href={{ url_for('organizations', page=search_results.next_num) }}>
     &raquo;
   </a>
   </div>
