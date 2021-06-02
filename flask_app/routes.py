@@ -31,6 +31,8 @@ def projects():
                 Projects.language.contains(search_term),
                 Projects.owner.contains(search_term),
                 Projects.source.contains(search_term)))
+        if 'name' in request.form:
+            projects_search_results_data = projects_search_results_data.order_by(Projects.name)
         return redirect(request.path)
     else:
         return render_template('projects_search.html', search_results=projects_search_results_data.paginate(page=page, per_page=50), search_term=search_term)
@@ -43,6 +45,8 @@ def organizations():
     if request.method == 'POST':
         search_term=request.form['search_term']
         orgs_search_results_data = Organizations.query.filter(Organizations.name.contains(search_term))
+        if 'name' in request.form:
+            orgs_search_results_data = orgs_search_results_data.order_by(Organizations.name)
         return redirect(request.path)
     else:
         return render_template('organizations.html', search_results=orgs_search_results_data.paginate(page=page, per_page=50), search_term=search_term, projects=Projects.query.all())
