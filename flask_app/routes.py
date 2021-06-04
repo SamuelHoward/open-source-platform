@@ -1,7 +1,7 @@
 from flask_app import app, db
 from flask import render_template, request, redirect, url_for
 from flask_app.models import *
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 
 '''
 @app.route('/')
@@ -31,11 +31,16 @@ def projects():
                 Projects.language.contains(search_term),
                 Projects.owner.contains(search_term),
                 Projects.source.contains(search_term)))
-        if 'name' in request.form:
+        if 'sort_by' in request.form and request.form['sort_by'] == 'name':
             if 'reverse' in request.form:
                 projects_search_results_data = projects_search_results_data.order_by(Projects.name.desc())
             else:
                 projects_search_results_data = projects_search_results_data.order_by(Projects.name)
+        elif 'sort_by' in request.form and request.form['sort_by'] == 'created':
+            if 'reverse' in request.form:
+                projects_search_results_data = projects_search_results_data.order_by(func.date(Projects.created_time))
+            else:
+                projects_search_results_data = projects_search_results_data.order_by(func.date(Projects.created_time).desc())
         return redirect(request.path)
     else:
         return render_template('projects_search.html', search_results=projects_search_results_data.paginate(page=page, per_page=50), search_term=search_term)

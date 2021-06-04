@@ -26,7 +26,8 @@ cur.execute('''CREATE TABLE IF NOT EXISTS Projects(
                name TEXT PRIMARY KEY, url TEXT, 
                description TEXT, source TEXT,
                owner TEXT, language TEXT,
-               owner_avatar TEXT
+               owner_avatar TEXT, created_time TEXT,
+               last_updated TEXT
                )''')
 
 # Scrape for projects

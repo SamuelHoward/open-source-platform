@@ -28,6 +28,8 @@ def githubScrape(pageLimit):
                 "owner": item["owner"]["login"],
                 "owner_avatar": item["owner"]["avatar_url"],
                 "language": item["language"],
+                "created_time": item["created_at"],
+                "last_updated": item["updated_at"],
             }
 
             # Append JSON dictionary to list
