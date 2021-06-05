@@ -29,7 +29,20 @@ a {
 }
 
 input {
-    background-color: #ADE8F4;;
+    background-color: #ADE8F4;
+}
+
+.project_description {
+    clear: both;
+}
+
+.project_title {
+    float: left;
+}
+
+.created_text {
+    float: right;
+    margin-top: 3px;
 }
 
 .search_section {

@@ -28,8 +28,13 @@
 <div class="project-card">
   <div class="container">
     <div class="project-text">
-      <a  href={{ project.url }}><h3>{{ project.name }}</h3></a>
-      <p> {{ project.description }}</p>
+      <span class="project_title"><a  href={{ project.url }}><h3>{{ project.name }}</h3></a></span>
+      {% if project.created_time is not none %}
+      <span class="created_text"> Created {{project.created_time[0:10]}} &nbsp;&nbsp;</span>
+      {% endif %}
+      <div class="project_description">
+	<p> {{ project.description }}</p>
+      </div>
     </div>
     {% if project.owner is not none %}
     <b>{{ project.owner }}</b>
