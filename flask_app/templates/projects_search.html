@@ -37,7 +37,7 @@
       </div>
     </div>
     {% if project.owner is not none %}
-    <b>{{ project.owner }}</b>
+    <b><a href={{"https://github.com/" + project.owner}}>{{ project.owner }}</a></b>
     {% endif %}
     {% if project.owner_avatar is not none %}
     <img src={{ project.owner_avatar }} width="30" class="proj-org-pic">
