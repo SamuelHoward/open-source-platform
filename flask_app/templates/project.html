@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<span><a  href={{ project.url }}><h2>{{ project.name }}</h2></a></span>
+{% if project.created_time is not none %}
+<span> Created {{project.created_time[0:10]}} &nbsp;&nbsp;</span>
+{% endif %}
+<div class="project_description">
+<p> {{ project.description }}</p>
+</div>
+{% if project.owner is not none %}
+<b><a href={{"https://github.com/" + project.owner}}>{{ project.owner }}</a></b>
+{% endif %}
+{% if project.owner_avatar is not none %}
+<img src={{ project.owner_avatar }} width="30" class="proj-org-pic">
+{% endif %}
+<b class="source">{{ project.source }}</b>
+{% if project.language is not none %}
+<b class="source">{{ project.language }}</b>
+{% endif %}
+
+{% endblock %}

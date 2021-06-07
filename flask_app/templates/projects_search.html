@@ -33,7 +33,7 @@
       <span class="created_text"> Created {{project.created_time[0:10]}} &nbsp;&nbsp;</span>
       {% endif %}
       <div class="project_description">
-	<p> {{ project.description }}</p>
+	<p><a href={{ url_for('project', projectName=project.name) }}> {{ project.description }} </a></p>
       </div>
     </div>
     {% if project.owner is not none %}
