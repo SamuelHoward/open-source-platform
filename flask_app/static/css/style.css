@@ -2,6 +2,8 @@ body {
     background-color: #CAF0F8;
     font-family: 'Jost', sans-serif;
     margin: 40px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 h1 {
@@ -21,6 +23,41 @@ hr {
 div {
     overflow: hidden;
     margin-left: 8px;
+}
+
+.header {
+    background-color: #CAF0F8;
+    overflow: visible;
+    width: 100%;
+    margin-left: 0px;
+    padding-bottom: 4px;
+    position: sticky;
+    top: 0;
+}
+
+.header-bottom {
+    position: sticky;
+    top: 115px;
+}
+
+.page-body {
+    overflow: visible;
+    margin-left: 0px;
+    position: relative;
+    min-height: 100vh;
+}
+
+.non-footer {
+    overflow: visible;
+    margin-left: 0px;
+    padding-bottom: 2.5rem;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;
 }
 
 a {

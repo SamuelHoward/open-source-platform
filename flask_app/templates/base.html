@@ -9,33 +9,42 @@
     <title>Open Source Platform</title>
   </head>
   <body>
-    <h1>
-      <span class="circle invis"></span>
-      <span class="circle center"></span>
-      <span class="circle outer"></span>
-    </h1>
-    <h1>
-      <span class="circle outer"></span>
-      <span class="circle center"></span>
-      <i class="osp-title">The Open Source Platform</i>
-    </h1>
-    <br />
-    An online platform for finding open source projects
-    <hr>
-    <div>
-      <span class="page-links">
-	<a href= {{ url_for('projects') }}>Projects</a>
-	&nbsp;&nbsp;&nbsp;&nbsp;
-	<a href= {{ url_for('organizations') }}>Organizations</a>
-      </span>
+    <div class="page-body">
+      <div class="non-footer">
+	<div class="header">
+	  <br />
+	  <h1>
+	    <span class="circle invis"></span>
+	    <span class="circle center"></span>
+	    <span class="circle outer"></span>
+	  </h1>
+	  <h1>
+	    <span class="circle outer"></span>
+	    <span class="circle center"></span>
+	    <i class="osp-title">The Open Source Platform</i>
+	  </h1>
+	</div>
+	<br />
+	An online platform for finding open source projects
+	<hr class="header-bottom">
+	<div>
+	  <span class="page-links">
+	    <a href= {{ url_for('projects') }}>Projects</a>
+	    &nbsp;&nbsp;&nbsp;&nbsp;
+	    <a href= {{ url_for('organizations') }}>Organizations</a>
+	  </span>
+	</div>
+	<div class="main-body">
+	  {% block content %}{% endblock %} <br>
+	</div>
+	<div class="footer">
+	  <span class="page-links">
+	    <a href= {{ url_for('projects') }}>Projects</a>
+	    &nbsp;&nbsp;&nbsp;&nbsp;
+	    <a href= {{ url_for('organizations') }}>Organizations</a>
+	  </span>
+	</div>
+      </div>
     </div>
-    <div class="main-body">
-    {% block content %}{% endblock %} <br>
-    </div>
-    <span class="page-links">
-      <a href= {{ url_for('projects') }}>Projects</a>
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <a href= {{ url_for('organizations') }}>Organizations</a>
-    </span>
   </body>
 </html>
