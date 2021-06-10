@@ -61,6 +61,14 @@ def project(projectName):
     except:
         return render_template('404.html'), 404
 
+@app.route('/org/<orgName>')
+def organization(orgName):
+    try:
+        org = Organizations.query.filter(Organizations.name==orgName).one()
+        return render_template('organization.html', organization=org, projects=Projects.query.all())
+    except:
+        return render_template('404.html'), 404
+    
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404

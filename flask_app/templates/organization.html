@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div>
+  <h3><a href={{ organization.url }}>{{ organization.name }}</a></h3>
+  {% if organization.avatar is not none %}
+  <img src={{ organization.avatar }} width="80" class="org-pic">
+  {% endif %}
+  <ul>
+    {% for project in projects %}
+    {% if project.owner == organization.name %}
+    <li><a href={{ project.url }}>{{ project.name }}</a></li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}
