@@ -9,8 +9,11 @@ search_term = None
 projectsPerPage = 25
 orgsPerPage = 25
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/')
+@app.route('/index')
+def index():
+    return render_template('index.html')
+
 @app.route('/projects', methods=['GET', 'POST'])
 def projects():
     global projects_search_results_data
