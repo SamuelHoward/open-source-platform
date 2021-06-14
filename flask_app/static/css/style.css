@@ -69,12 +69,17 @@ input {
     background-color: #ADE8F4;
 }
 
+.forks_watchers {
+    clear: both;
+}
+
 .index-text {
     max-width: 1000px;
 }
 
 .project_description {
     clear: both;
+    margin-top: -10px;
 }
 
 .project_title {

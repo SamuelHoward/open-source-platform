@@ -14,6 +14,10 @@
     <label for="name">Name</label>
     <input type="radio" name="sort_by" value="created" id="created">
     <label for="name">Date Created</label>
+    <input type="radio" name="sort_by" value="forks" id="forks">
+    <label for="name">Forks</label>
+    <input type="radio" name="sort_by" value="watchers" id="watchers">
+    <label for="name">Watchers</label>
     <br>
     <input type="radio" name="reverse" value="reverse" id="reverse">
     <label for="name">Reverse results</label>
@@ -39,6 +43,10 @@
       {% if project.created_time is not none %}
       <span class="created_text"> Created {{project.created_time[0:10]}} &nbsp;&nbsp;</span>
       {% endif %}
+      <div class="forks_watchers">
+	{{project.forks}} forks &nbsp;&nbsp;
+	{{project.watchers}} watchers
+      </div>
       <div class="project_description">
 	<p><a href={{ url_for('project', projectName=project.name) }}> {{ project.description }} </a></p>
       </div>

@@ -5,6 +5,11 @@
 {% if project.created_time is not none %}
 <span> Created {{project.created_time[0:10]}} &nbsp;&nbsp;</span>
 {% endif %}
+
+<div class="forks_watchers">
+  {{project.forks}} forks &nbsp;&nbsp;
+  {{project.watchers}} watchers
+</div>
 <div class="project_description">
 <p> {{ project.description }}</p>
 </div>
