@@ -50,6 +50,11 @@ def projects():
                 projects_search_results_data = projects_search_results_data.order_by(Projects.watchers)
             else:
                 projects_search_results_data = projects_search_results_data.order_by(Projects.watchers.desc())
+        elif 'sort_by' in request.form and request.form['sort_by'] == 'issues':
+            if 'reverse' in request.form:
+                projects_search_results_data = projects_search_results_data.order_by(Projects.open_issues)
+            else:
+                projects_search_results_data = projects_search_results_data.order_by(Projects.open_issues.desc())
         return redirect(request.path)
     else:
         return render_template('projects_search.html', search_results=projects_search_results_data.paginate(page=page, per_page=projectsPerPage), search_term=search_term)

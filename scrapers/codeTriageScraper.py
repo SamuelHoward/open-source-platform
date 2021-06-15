@@ -35,6 +35,7 @@ def codeTriageScrape(pageLimit):
             url = "https://www.codetriage.com" + urlSuffix
             owner = urlSuffix[1:urlSuffix[1:].find('/')+1]
             language = pc.get('data-language')
+            open_issues = int(soup.find_all("span", {"class": "repo-item-issues"})[0].text.strip().split()[0])
             
             # Store those values in a dictionary
             objDict = {
@@ -44,6 +45,7 @@ def codeTriageScrape(pageLimit):
                 "source": "codeTriage",
                 "owner": owner,
                 "language": language,
+                "open_issues": open_issues
             }
         
             # Append JSON dictionary to list

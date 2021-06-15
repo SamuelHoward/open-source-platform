@@ -18,6 +18,8 @@
     <label for="name">Forks</label>
     <input type="radio" name="sort_by" value="watchers" id="watchers">
     <label for="name">Watchers</label>
+    <input type="radio" name="sort_by" value="issues" id="issues">
+    <label for="name">Issues</label>
     <br>
     <input type="radio" name="reverse" value="reverse" id="reverse">
     <label for="name">Reverse results</label>
@@ -48,7 +50,10 @@
 	{{project.forks}} forks &nbsp;&nbsp;
 	{% endif %}
 	{% if project.watchers is not none %}
-	{{project.watchers}} watchers
+	{{project.watchers}} watchers &nbsp;&nbsp;
+	{% endif %}
+	{% if project.open_issues is not none %}
+	{{project.open_issues}} issues
 	{% endif %}
       </div>
       <div class="project_description">

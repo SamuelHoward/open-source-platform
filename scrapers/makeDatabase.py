@@ -27,7 +27,8 @@ cur.execute('''CREATE TABLE IF NOT EXISTS Projects(
                description TEXT, source TEXT,
                owner TEXT, language TEXT,
                owner_avatar TEXT, created_time TEXT,
-               last_updated TEXT, forks INT, watchers INT
+               last_updated TEXT, forks INT, watchers INT,
+               open_issues INT
                )''')
 
 # Scrape for projects

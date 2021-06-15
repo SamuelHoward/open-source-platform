@@ -11,7 +11,10 @@
   {{project.forks}} forks &nbsp;&nbsp;
   {% endif %}
   {% if project.watchers is not none %}
-  {{project.watchers}} watchers
+  {{project.watchers}} watchers &nbsp;&nbsp;
+  {% endif %}
+  {% if project.open_issues is not none %}
+  {{project.open_issues}} issues
   {% endif %}
 </div>
 <div class="project_description">
