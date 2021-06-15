@@ -7,8 +7,12 @@
 {% endif %}
 
 <div class="forks_watchers">
+  {% if project.forks is not none %}
   {{project.forks}} forks &nbsp;&nbsp;
+  {% endif %}
+  {% if project.watchers is not none %}
   {{project.watchers}} watchers
+  {% endif %}
 </div>
 <div class="project_description">
 <p> {{ project.description }}</p>
