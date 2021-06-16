@@ -8,13 +8,13 @@
 
 <div class="forks_watchers">
   {% if project.forks is not none %}
-  {{project.forks}} forks &nbsp;&nbsp;
+  <a  href={{ project.url + "/network/members" }}>{{project.forks}} forks &nbsp;&nbsp;</a>
   {% endif %}
   {% if project.watchers is not none %}
-  {{project.watchers}} watchers &nbsp;&nbsp;
+  <a  href={{ project.url + "/watchers" }}>{{project.watchers}} watchers &nbsp;&nbsp;</a>
   {% endif %}
   {% if project.open_issues is not none %}
-  {{project.open_issues}} issues
+  <a  href={{ project.url + "/issues" }}>{{project.open_issues}} issues</a>
   {% endif %}
 </div>
 <div class="project_description">
