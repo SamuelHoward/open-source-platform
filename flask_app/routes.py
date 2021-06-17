@@ -83,7 +83,10 @@ def organizations():
 def project(projectName):
     try:
         proj = Projects.query.filter(Projects.name==projectName).one()
-        return render_template('project.html', project=proj)
+        orgName = Organizations.query.filter(Organizations.name==proj.owner).one()
+        projs = Projects.query.filter(Projects.owner==orgName.name)
+        count = projs.count()
+        return render_template('project.html', project=proj, projects=projs, count=count)
     except:
         return render_template('404.html'), 404
 
@@ -91,7 +94,8 @@ def project(projectName):
 def organization(orgName):
     try:
         org = Organizations.query.filter(Organizations.name==orgName).one()
-        return render_template('organization.html', organization=org, projects=Projects.query.all())
+        projs = Projects.query.filter(Projects.owner==orgName)
+        return render_template('organization.html', organization=org, projects=projs)
     except:
         return render_template('404.html'), 404
     

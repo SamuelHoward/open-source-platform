@@ -20,15 +20,35 @@
 <div class="project_description">
 <p> {{ project.description }}</p>
 </div>
+
+<b class="surce">{{ project.source }}</b>
+{% if project.language is not none %}
+<b class="surce">{{ project.language }}</b>
+{% endif %}
+
+<br />
+<br />
+
 {% if project.owner is not none %}
 <b><a href={{"https://github.com/" + project.owner}}>{{ project.owner }}</a></b>
 {% endif %}
 {% if project.owner_avatar is not none %}
-<img src={{ project.owner_avatar }} width="30" class="proj-org-pic">
+<a href={{ url_for('organization', orgName=project.owner)}}><img src={{ project.owner_avatar }} width="30" class="proj-org-pic"></a>
 {% endif %}
-<b class="source">{{ project.source }}</b>
-{% if project.language is not none %}
-<b class="source">{{ project.language }}</b>
+
+<br />
+<br />
+
+{% if count > 1 %}
+<h3>Other Projects by {{project.owner}}</h3>
+
+<ul>
+  {% for proj in projects %}
+  {% if proj.owner == project.owner %}
+  <li><a href={{ proj.url }}>{{ proj.name }}</a></li>
+  {% endif %}
+  {% endfor %}
+</ul>
 {% endif %}
 
 {% endblock %}
