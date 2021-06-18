@@ -12,7 +12,7 @@ orgsPerPage = 25
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', title='Open Source Platform')
 
 @app.route('/projects', methods=['GET', 'POST'])
 def projects():
@@ -57,7 +57,7 @@ def projects():
                 projects_search_results_data = projects_search_results_data.order_by(Projects.open_issues.desc())
         return redirect(request.path)
     else:
-        return render_template('projects_search.html', search_results=projects_search_results_data.paginate(page=page, per_page=projectsPerPage), search_term=search_term)
+        return render_template('projects_search.html', search_results=projects_search_results_data.paginate(page=page, per_page=projectsPerPage), search_term=search_term, title='OSP | Projects')
 
 @app.route('/organizations', methods=['GET', 'POST'])
 def organizations():
@@ -77,7 +77,7 @@ def organizations():
                 orgs_search_results_data = orgs_search_results_data.order_by(Organizations.name)
         return redirect(request.path)
     else:
-        return render_template('organizations.html', search_results=orgs_search_results_data.paginate(page=page, per_page=orgsPerPage), search_term=search_term, projects=Projects.query.all())
+        return render_template('organizations.html', search_results=orgs_search_results_data.paginate(page=page, per_page=orgsPerPage), search_term=search_term, projects=Projects.query.all(), title='OSP | Organizations')
 
 @app.route('/project/<projectName>')
 def project(projectName):
@@ -86,19 +86,19 @@ def project(projectName):
         orgName = Organizations.query.filter(Organizations.name==proj.owner).one()
         projs = Projects.query.filter(Projects.owner==orgName.name)
         count = projs.count()
-        return render_template('project.html', project=proj, projects=projs, count=count)
+        return render_template('project.html', project=proj, projects=projs, count=count, title='OSP | ' + projectName)
     except:
-        return render_template('404.html'), 404
+        return render_template('404.html', title='OSP | 404'), 404
 
 @app.route('/org/<orgName>')
 def organization(orgName):
     try:
         org = Organizations.query.filter(Organizations.name==orgName).one()
         projs = Projects.query.filter(Projects.owner==orgName)
-        return render_template('organization.html', organization=org, projects=projs)
+        return render_template('organization.html', organization=org, projects=projs, title='OSP | ' + orgName)
     except:
-        return render_template('404.html'), 404
+        return render_template('404.html', title='OSP | 404'), 404
     
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('404.html', title='OSP | 404'), 404
