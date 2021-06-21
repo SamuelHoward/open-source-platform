@@ -32,7 +32,8 @@ def githubScrape(pageLimit):
                 "last_updated": item["updated_at"],
                 "forks": item["forks"],
                 "watchers": item["watchers"],
-                "open_issues": item["open_issues"]
+                "open_issues": item["open_issues"],
+                "owner_type": item["owner"]["type"]
             }
 
             # Append JSON dictionary to list

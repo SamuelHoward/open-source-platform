@@ -104,13 +104,24 @@ input {
     float: left;
     margin-right: 10px;
     margin-left: 5px;
+}
+
+.proj-user-pic {
+    float: left;
+    margin-right: 10px;
+    margin-left: 5px;
+    border-radius: 50%;
+}
+
+.user-pic {
+    float: right;
+    margin-right: 40px;
     border-radius: 50%;
 }
 
 .org-pic {
     float: right;
     margin-right: 40px;
-    border-radius: 50%;
 }
 
 .page-links {

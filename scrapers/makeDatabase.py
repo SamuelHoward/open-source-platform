@@ -28,7 +28,7 @@ cur.execute('''CREATE TABLE IF NOT EXISTS Projects(
                owner TEXT, language TEXT,
                owner_avatar TEXT, created_time TEXT,
                last_updated TEXT, forks INT, watchers INT,
-               open_issues INT
+               open_issues INT, owner_type TEXT
                )''')
 
 # Scrape for projects
@@ -77,7 +77,8 @@ print("Total existing records seen again: " + str(oldRecords))
 
 cur.execute('DROP TABLE IF EXISTS Organizations')
 cur.execute('''CREATE TABLE Organizations AS 
-               SELECT DISTINCT owner AS "name", owner_avatar AS "avatar"
+               SELECT DISTINCT owner AS "name", owner_avatar AS "avatar",
+               owner_type as "owner_type"
                FROM Projects
                ''')
 cur.execute('''ALTER TABLE Organizations

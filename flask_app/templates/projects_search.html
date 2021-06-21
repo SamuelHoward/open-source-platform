@@ -79,7 +79,11 @@
     <b><a href={{"https://github.com/" + project.owner}}>{{ project.owner }}</a></b>
     {% endif %}
     {% if project.owner_avatar is not none %}
+    {% if project.owner_type == "User" %}
+    <a href={{ url_for('organization', orgName=project.owner)}}><img src={{ project.owner_avatar }} width="30" class="proj-user-pic"></a>
+    {% else %}
     <a href={{ url_for('organization', orgName=project.owner)}}><img src={{ project.owner_avatar }} width="30" class="proj-org-pic"></a>
+    {% endif %}
     {% endif %}
     <b class="source">{{ project.source }}</b>
     {% if project.language is not none %}

@@ -14,6 +14,7 @@ class Projects(db.Model):
     forks = db.Column(db.Integer)
     watchers = db.Column(db.Integer)
     open_issues = db.Column(db.Integer)
+    owner_type = db.Column(db.String(32))
     
     def __repr__(self):
         return 'Project: Name: %s URL: %s Description: %s Source: %s Owner: %s Language %s' % (self.name, self.url, self.description, self.source, self.owner, self.language)
@@ -23,6 +24,7 @@ class Organizations(db.Model):
     name = db.Column(db.String(80), primary_key=True)
     url = db.Column(db.String(100))
     avatar = db.Column(db.String(100))
+    owner_type = db.Column(db.String(32))
     
     def __repr__(self):
         return 'Organization: Name: %s URL: %s' % (self.name, self.url)

@@ -35,7 +35,11 @@
     <div class="project-text">
       <h3><a href={{ organization.url }}>{{ organization.name }}</a></h3>
       {% if organization.avatar is not none %}
+      {% if organization.owner_type == "User" %}
+      <a href={{ url_for('organization', orgName=organization.name)}}><img src={{ organization.avatar }} width="80" class="user-pic"></a>
+      {% else %}
       <a href={{ url_for('organization', orgName=organization.name)}}><img src={{ organization.avatar }} width="80" class="org-pic"></a>
+      {% endif %}
       {% endif %}
       <ul>
       {% for project in projects %}
