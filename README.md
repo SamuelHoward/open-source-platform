@@ -1,4 +1,7 @@
 # open-source-platform
 The Open Source Platform is a website designed to be a hub for finding open source projects.
 
-Although currently a work in progress, the current site can be viewed at https://open-source-platform.herokuapp.com/
+An early version of the site can be viewed at https://open-source-platform.herokuapp.com/
+
+The current version in this repo is a work in progress and is not yet secure.
+
