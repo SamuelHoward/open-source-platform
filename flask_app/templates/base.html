@@ -63,6 +63,18 @@
 	    <a href= {{ url_for('projects') }}>Projects</a>
 	    &nbsp;&nbsp;&nbsp;&nbsp;
 	    <a href= {{ url_for('organizations') }}>Organizations</a>
+	    {% if not current_user.is_authenticated %}
+	    &nbsp;&nbsp;&nbsp;&nbsp;
+	    <a href= {{ url_for('auth.login') }}>Login</a>
+	    &nbsp;&nbsp;&nbsp;&nbsp;
+	    <a href= {{ url_for('auth.signup') }}>Sign Up</a>
+	    {% endif %}
+	    {% if current_user.is_authenticated %}
+	    &nbsp;&nbsp;&nbsp;&nbsp;
+	    <a href= {{ url_for('main.profile') }}>Profile</a>
+	    &nbsp;&nbsp;&nbsp;&nbsp;
+	    <a href= {{ url_for('auth.logout') }}>Log out</a>
+	    {% endif %}
 	  </span>
 	</div>
       </div>
