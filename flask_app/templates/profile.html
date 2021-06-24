@@ -9,7 +9,7 @@
 
 <ul>
 {% for project in favorites %}
-  <li> {{ project.fav_name }} </li>
+  <li> <a href={{ url_for('project', projectName=project.fav_name) }}>{{ project.fav_name }}</a> </li>
 {% endfor %}
 <ul>
 {% endblock %}

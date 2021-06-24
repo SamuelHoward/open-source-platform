@@ -1,7 +1,7 @@
 from flask_app import app, db
 from flask import render_template, request, redirect, url_for
 from flask_app.models import *
-from sqlalchemy import or_, func
+from sqlalchemy import or_, and_, func
 from flask import Blueprint
 from flask_login import login_required, current_user
 import random
@@ -62,9 +62,11 @@ def projects():
                 projects_search_results_data = projects_search_results_data.order_by(Projects.open_issues.desc())
         return redirect(request.path)
     elif request.method == 'POST' and 'fav_name' in request.form:
-        new_fav = Favorites(id=random.randint(-9223372036854775808, 9223372036854775807), user_id=current_user.id, fav_name=request.form['fav_name'], fav_type='project')
-        db.session.add(new_fav)
-        db.session.commit()
+        favorite=Favorites.query.filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['fav_name'])).first()
+        if favorite is None:
+            new_fav = Favorites(id=random.randint(-9223372036854775808, 9223372036854775807), user_id=current_user.id, fav_name=request.form['fav_name'], fav_type='project')
+            db.session.add(new_fav)
+            db.session.commit()
         return redirect(request.path)
     else:
         return render_template('projects_search.html', search_results=projects_search_results_data.paginate(page=page, per_page=projectsPerPage), search_term=search_term, title='OSP | Projects')
