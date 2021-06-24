@@ -69,6 +69,10 @@ input {
     background-color: #ADE8F4;
 }
 
+button {
+    background-color: #ADE8F4;
+}
+
 .forks_watchers {
     clear: both;
 }
