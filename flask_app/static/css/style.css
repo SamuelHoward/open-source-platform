@@ -82,6 +82,12 @@ button.fav {
     float: left;
 }
 
+button.unfav {
+    float: left;
+    background-color: #03045E;
+    color: #ADE8F4;
+}
+
 .forks_watchers {
     clear: both;
 }

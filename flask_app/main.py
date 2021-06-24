@@ -68,8 +68,13 @@ def projects():
             db.session.add(new_fav)
             db.session.commit()
         return redirect(request.path)
+    elif request.method == 'POST' and 'unfav_name' in request.form:
+        fav = db.session.query(Favorites).filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['unfav_name'])).first()
+        db.session.delete(fav)
+        db.session.commit()
+        return redirect(request.path)
     else:
-        return render_template('projects_search.html', search_results=projects_search_results_data.paginate(page=page, per_page=projectsPerPage), search_term=search_term, title='OSP | Projects')
+        return render_template('projects_search.html', search_results=projects_search_results_data.paginate(page=page, per_page=projectsPerPage), search_term=search_term, title='OSP | Projects', favorites=Favorites.query.filter(Favorites.user_id==current_user.id).with_entities(Favorites.fav_name))
 
 @app.route('/organizations', methods=['GET', 'POST'])
 def organizations():

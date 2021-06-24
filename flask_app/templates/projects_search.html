@@ -45,11 +45,20 @@
       {% if project.created_time is not none %}
       <span class="created_text"> Created {{project.created_time[0:10]}} &nbsp;&nbsp;</span>
       {% endif %}
+
+      {% if (project.name,) in favorites %}
+      {{ fav }}
+      {% endif %}
+      
       <div class="forks_watchers">
 
 	{% if current_user.is_authenticated %}
 	<form method="POST">
+	  {% if (project.name,) not in favorites %}
 	  <button type="submit" name="fav_name" value={{ project.name }} class="fav">Favorite</button>
+	  {% else %}
+	  <button type="submit" name="unfav_name" value={{ project.name }} class="unfav">Favorited</button>
+	  {% endif %}
 	</form>
 	&nbsp;
 	{% endif %}
