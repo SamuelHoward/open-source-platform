@@ -4,6 +4,7 @@ from flask_app.models import *
 from sqlalchemy import or_, func
 from flask import Blueprint
 from flask_login import login_required, current_user
+import random
 
 main = Blueprint('main', __name__)
 
@@ -24,7 +25,7 @@ def projects():
     global search_term
     global projectsPerPage
     page = request.args.get('page', 1, type=int)
-    if request.method == 'POST':
+    if request.method == 'POST' and 'search_term' in request.form:
         search_term=request.form['search_term']
         projects_search_results_data = Projects.query.filter(
             or_(Projects.description.contains(search_term),
@@ -59,6 +60,11 @@ def projects():
                 projects_search_results_data = projects_search_results_data.order_by(Projects.open_issues)
             else:
                 projects_search_results_data = projects_search_results_data.order_by(Projects.open_issues.desc())
+        return redirect(request.path)
+    elif request.method == 'POST' and 'fav_name' in request.form:
+        new_fav = Favorites(id=random.randint(-9223372036854775808, 9223372036854775807), user_id=current_user.id, fav_name=request.form['fav_name'], fav_type='project')
+        db.session.add(new_fav)
+        db.session.commit()
         return redirect(request.path)
     else:
         return render_template('projects_search.html', search_results=projects_search_results_data.paginate(page=page, per_page=projectsPerPage), search_term=search_term, title='OSP | Projects')
@@ -106,7 +112,7 @@ def organization(orgName):
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.name)
+    return render_template('profile.html', name=current_user.name, title='OSP | Profile', favorites=Favorites.query.filter(Favorites.user_id==current_user.id))
     
 @app.errorhandler(404)
 def page_not_found(e):

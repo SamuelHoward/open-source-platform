@@ -5,4 +5,11 @@
   Welcome, {{ name }}!
 </h2>
 
+<h3>Favorite Projects:</h3>
+
+<ul>
+{% for project in favorites %}
+  <li> {{ project.fav_name }} </li>
+{% endfor %}
+<ul>
 {% endblock %}

@@ -46,6 +46,14 @@
       <span class="created_text"> Created {{project.created_time[0:10]}} &nbsp;&nbsp;</span>
       {% endif %}
       <div class="forks_watchers">
+
+	{% if current_user.is_authenticated %}
+	<form method="POST">
+	  <button type="submit" name="fav_name" value={{ project.name }} class="fav">Favorite</button>
+	</form>
+	&nbsp;
+	{% endif %}
+	
 	{% if project.forks is not none %}
 	{% if project.forks == 1 %}
 	<a  href={{ project.url + "/network/members" }}>{{project.forks}} fork &nbsp;&nbsp;</a>
