@@ -17,9 +17,9 @@ from .models import Users
 
 @login_manager.user_loader
 def load_user(user_id):
-    print(user_id)
+    #print(user_id)
     if user_id is not None and user_id != 'None':
-        print(type(user_id))
+        #print(type(user_id))
         return Users.query.get(int(user_id))
 
 from .auth import auth as auth_blueprint

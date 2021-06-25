@@ -27,7 +27,6 @@ def login():
                 return redirect(url_for('auth.login'))
 
         user = Users(id=id_q.first()[0], email=email, name=name_q.first()[0], password=pass_q.first()[0])
-        print(user)
         login_user(user, remember=remember)
         return redirect(url_for('main.profile'))
     else:
