@@ -45,10 +45,6 @@
       {% if project.created_time is not none %}
       <span class="created_text"> Created {{project.created_time[0:10]}} &nbsp;&nbsp;</span>
       {% endif %}
-
-      {% if (project.name,) in favorites %}
-      {{ fav }}
-      {% endif %}
       
       <div class="forks_watchers">
 

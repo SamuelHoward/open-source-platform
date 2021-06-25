@@ -7,15 +7,42 @@
 {% endif %}
 
 <div class="forks_watchers">
+
+  {% if current_user.is_authenticated %}
+  <form method="POST">
+  {% if (project.name,) not in favorites %}
+  <button type="submit" name="fav_name" value={{ project.name }} class="fav">Favorite</button>
+  {% else %}
+  <button type="submit" name="unfav_name" value={{ project.name }} class="unfav">Favorited</button>
+  {% endif %}
+  </form>
+  &nbsp;
+  {% endif %}
+
   {% if project.forks is not none %}
+  {% if project.forks == 1 %}
+  <a  href={{ project.url + "/network/members" }}>{{project.forks}} fork &nbsp;&nbsp;</a>
+  {% elif project.forks != 0 %}
   <a  href={{ project.url + "/network/members" }}>{{project.forks}} forks &nbsp;&nbsp;</a>
   {% endif %}
+  {% endif %}
+
   {% if project.watchers is not none %}
+  {% if project.watchers == 1 %}
+  <a  href={{ project.url + "/watchers" }}>{{project.watchers}} watcher &nbsp;&nbsp;</a>
+  {% elif project.watchers != 0 %}
   <a  href={{ project.url + "/watchers" }}>{{project.watchers}} watchers &nbsp;&nbsp;</a>
   {% endif %}
-  {% if project.open_issues is not none %}
-  <a  href={{ project.url + "/issues" }}>{{project.open_issues}} issues</a>
   {% endif %}
+
+  {% if project.open_issues is not none %}
+  {% if project.open_issues == 1 %}
+  <a  href={{ project.url + "/issues" }}>{{project.open_issues}} issue &nbsp;&nbsp;</a>
+  {% elif project.open_issues != 0 %}
+  <a  href={{ project.url + "/issues" }}>{{project.open_issues}} issues &nbsp;&nbsp;</a>
+  {% endif %}
+  {% endif %}
+  
 </div>
 <div class="project_description">
 <p> {{ project.description }}</p>

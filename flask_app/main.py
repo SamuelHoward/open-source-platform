@@ -99,14 +99,29 @@ def organizations():
     else:
         return render_template('organizations.html', search_results=orgs_search_results_data.paginate(page=page, per_page=orgsPerPage), search_term=search_term, projects=Projects.query.all(), title='OSP | Organizations')
 
-@app.route('/project/<projectName>')
+@app.route('/project/<projectName>', methods=['GET', 'POST'])
 def project(projectName):
+    if request.method == 'POST' and 'fav_name' in request.form:
+        favorite=Favorites.query.filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['fav_name'])).first()
+        if favorite is None:
+            new_fav = Favorites(id=random.randint(-9223372036854775808, 9223372036854775807), user_id=current_user.id, fav_name=request.form['fav_name'], fav_type='project')
+            db.session.add(new_fav)
+            db.session.commit()
+        return redirect(request.path)
+    elif request.method == 'POST' and 'unfav_name' in request.form:
+        fav = db.session.query(Favorites).filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['unfav_name'])).first()
+        db.session.delete(fav)
+        db.session.commit()
+        return redirect(request.path)
     try:
         proj = Projects.query.filter(Projects.name==projectName).one()
         orgName = Organizations.query.filter(Organizations.name==proj.owner).one()
         projs = Projects.query.filter(Projects.owner==orgName.name)
         count = projs.count()
-        return render_template('project.html', project=proj, projects=projs, count=count, title='OSP | ' + projectName)
+        try:
+            return render_template('project.html', project=proj, projects=projs, count=count, title='OSP | ' + projectName, favorites=Favorites.query.filter(Favorites.user_id==current_user.id).with_entities(Favorites.fav_name))
+        except:
+            return render_template('project.html', project=proj, projects=projs, count=count, title='OSP | ' + projectName, favorites=[])
     except:
         return render_template('404.html', title='OSP | 404'), 404
 
