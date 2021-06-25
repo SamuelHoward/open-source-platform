@@ -34,6 +34,20 @@
   <div class="container">
     <div class="project-text">
       <h3><a href={{ organization.url }}>{{ organization.name }}</a></h3>
+
+      <div class="forks_watchers">
+
+	{% if current_user.is_authenticated %}
+	<form method="POST">
+	  {% if (organization.name,) not in favorites %}
+	  <button type="submit" name="fav_name" value={{ organization.name }} class="fav">Favorite</button>
+	  {% else %}
+	  <button type="submit" name="unfav_name" value={{ organization.name }} class="unfav">Favorited</button>
+	  {% endif %}
+	</form>
+	&nbsp;
+	{% endif %}
+      </div>
       {% if organization.avatar is not none %}
       {% if organization.owner_type == "User" %}
       <a href={{ url_for('organization', orgName=organization.name)}}><img src={{ organization.avatar }} width="80" class="user-pic"></a>

@@ -62,20 +62,20 @@ def projects():
                 projects_search_results_data = projects_search_results_data.order_by(Projects.open_issues.desc())
         return redirect(request.path)
     elif request.method == 'POST' and 'fav_name' in request.form:
-        favorite=Favorites.query.filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['fav_name'])).first()
+        favorite=Favorites.query.filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['fav_name'], Favorites.fav_type=='project')).first()
         if favorite is None:
             new_fav = Favorites(id=random.randint(-9223372036854775808, 9223372036854775807), user_id=current_user.id, fav_name=request.form['fav_name'], fav_type='project')
             db.session.add(new_fav)
             db.session.commit()
         return redirect(request.path)
     elif request.method == 'POST' and 'unfav_name' in request.form:
-        fav = db.session.query(Favorites).filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['unfav_name'])).first()
+        fav = db.session.query(Favorites).filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['unfav_name'], Favorites.fav_type=='project')).first()
         db.session.delete(fav)
         db.session.commit()
         return redirect(request.path)
     else:
         try:
-            return render_template('projects_search.html', search_results=projects_search_results_data.paginate(page=page, per_page=projectsPerPage), search_term=search_term, title='OSP | Projects', favorites=Favorites.query.filter(Favorites.user_id==current_user.id).with_entities(Favorites.fav_name))
+            return render_template('projects_search.html', search_results=projects_search_results_data.paginate(page=page, per_page=projectsPerPage), search_term=search_term, title='OSP | Projects', favorites=Favorites.query.filter(and_(Favorites.user_id==current_user.id, Favorites.fav_type=='project')).with_entities(Favorites.fav_name))
         except:
             return render_template('projects_search.html', search_results=projects_search_results_data.paginate(page=page, per_page=projectsPerPage), search_term=search_term, title='OSP | Projects', favorites=[])
         
@@ -85,7 +85,7 @@ def organizations():
     global search_term
     global orgsPerPage
     page = request.args.get('page', 1, type=int)
-    if request.method == 'POST':
+    if request.method == 'POST' and 'search_term' in request.form:
         search_term=request.form['search_term']
         orgs_search_results_data = Organizations.query.filter(Organizations.name.contains(search_term))
         if 'per_page' in request.form:
@@ -96,20 +96,35 @@ def organizations():
             else:
                 orgs_search_results_data = orgs_search_results_data.order_by(Organizations.name)
         return redirect(request.path)
+    if request.method == 'POST' and 'fav_name' in request.form:
+        favorite=Favorites.query.filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['fav_name'], Favorites.fav_type=='org')).first()
+        if favorite is None:
+            new_fav = Favorites(id=random.randint(-9223372036854775808, 9223372036854775807), user_id=current_user.id, fav_name=request.form['fav_name'], fav_type='org')
+            db.session.add(new_fav)
+            db.session.commit()
+        return redirect(request.path)
+    elif request.method == 'POST' and 'unfav_name' in request.form:
+        fav = db.session.query(Favorites).filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['unfav_name'], Favorites.fav_type=='org')).first()
+        db.session.delete(fav)
+        db.session.commit()
+        return redirect(request.path)
     else:
-        return render_template('organizations.html', search_results=orgs_search_results_data.paginate(page=page, per_page=orgsPerPage), search_term=search_term, projects=Projects.query.all(), title='OSP | Organizations')
+        try:
+            return render_template('organizations.html', search_results=orgs_search_results_data.paginate(page=page, per_page=orgsPerPage), search_term=search_term, projects=Projects.query.all(), title='OSP | Organizations', favorites=Favorites.query.filter(and_(Favorites.user_id==current_user.id, Favorites.fav_type=='org')).with_entities(Favorites.fav_name))
+        except:
+            return render_template('organizations.html', search_results=orgs_search_results_data.paginate(page=page, per_page=orgsPerPage), search_term=search_term, projects=Projects.query.all(), title='OSP | Organizations', favorites=[])
 
 @app.route('/project/<projectName>', methods=['GET', 'POST'])
 def project(projectName):
     if request.method == 'POST' and 'fav_name' in request.form:
-        favorite=Favorites.query.filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['fav_name'])).first()
+        favorite=Favorites.query.filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['fav_name'], Favorites.fav_type=='project')).first()
         if favorite is None:
             new_fav = Favorites(id=random.randint(-9223372036854775808, 9223372036854775807), user_id=current_user.id, fav_name=request.form['fav_name'], fav_type='project')
             db.session.add(new_fav)
             db.session.commit()
         return redirect(request.path)
     elif request.method == 'POST' and 'unfav_name' in request.form:
-        fav = db.session.query(Favorites).filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['unfav_name'])).first()
+        fav = db.session.query(Favorites).filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['unfav_name'], Favorites.fav_type=='project')).first()
         db.session.delete(fav)
         db.session.commit()
         return redirect(request.path)
@@ -119,18 +134,33 @@ def project(projectName):
         projs = Projects.query.filter(Projects.owner==orgName.name)
         count = projs.count()
         try:
-            return render_template('project.html', project=proj, projects=projs, count=count, title='OSP | ' + projectName, favorites=Favorites.query.filter(Favorites.user_id==current_user.id).with_entities(Favorites.fav_name))
+            return render_template('project.html', project=proj, projects=projs, count=count, title='OSP | ' + projectName, favorites=Favorites.query.filter(and_(Favorites.user_id==current_user.id, Favorites.fav_type=='project')).with_entities(Favorites.fav_name))
         except:
             return render_template('project.html', project=proj, projects=projs, count=count, title='OSP | ' + projectName, favorites=[])
     except:
         return render_template('404.html', title='OSP | 404'), 404
 
-@app.route('/org/<orgName>')
+@app.route('/org/<orgName>', methods=['GET', 'POST'])
 def organization(orgName):
+    if request.method == 'POST' and 'fav_name' in request.form:
+        favorite=Favorites.query.filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['fav_name'], Favorites.fav_type=='project')).first()
+        if favorite is None:
+            new_fav = Favorites(id=random.randint(-9223372036854775808, 9223372036854775807), user_id=current_user.id, fav_name=request.form['fav_name'], fav_type='org')
+            db.session.add(new_fav)
+            db.session.commit()
+        return redirect(request.path)
+    elif request.method == 'POST' and 'unfav_name' in request.form:
+        fav = db.session.query(Favorites).filter(and_(Favorites.user_id==current_user.id, Favorites.fav_name==request.form['unfav_name'], Favorites.fav_type=='org')).first()
+        db.session.delete(fav)
+        db.session.commit()
+        return redirect(request.path)
     try:
         org = Organizations.query.filter(Organizations.name==orgName).one()
         projs = Projects.query.filter(Projects.owner==orgName)
-        return render_template('organization.html', organization=org, projects=projs, title='OSP | ' + orgName)
+        try:
+            return render_template('organization.html', organization=org, projects=projs, title='OSP | ' + orgName, favorites=Favorites.query.filter(and_(Favorites.user_id==current_user.id, Favorites.fav_type=='org')).with_entities(Favorites.fav_name))
+        except:
+            return render_template('organization.html', organization=org, projects=projs, title='OSP | ' + orgName, favorites=[])
     except:
         return render_template('404.html', title='OSP | 404'), 404
 

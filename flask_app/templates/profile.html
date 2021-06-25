@@ -8,8 +8,21 @@
 <h3>Favorite Projects:</h3>
 
 <ul>
-{% for project in favorites %}
+  {% for project in favorites %}
+  {% if project.fav_type == 'project' %}
   <li> <a href={{ url_for('project', projectName=project.fav_name) }}>{{ project.fav_name }}</a> </li>
-{% endfor %}
+  {% endif %}
+  {% endfor %}
+</ul>
+
+<h3>Favorite Organizations:</h3>
+
 <ul>
+  {% for org in favorites %}
+  {% if org.fav_type == 'org' %}
+  <li> <a href={{ url_for('organization', orgName=org.fav_name) }}>{{ org.fav_name }}</a> </li>
+  {% endif %}
+  {% endfor %}
+</ul>
+    
 {% endblock %}
