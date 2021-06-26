@@ -11,8 +11,10 @@ import random
 main = Blueprint('main', __name__)
 
 # Define global variables
-orgs_search_results_data = Organizations.query.filter(Organizations.name.contains(""))
-projects_search_results_data = Projects.query.filter(Projects.description.contains(""))
+orgs_search_results_data = Organizations.query.filter(
+    Organizations.name.contains(""))
+projects_search_results_data = Projects.query.filter(
+    Projects.description.contains(""))
 search_term = None
 projectsPerPage = 25
 orgsPerPage = 25
