@@ -491,6 +491,12 @@ def profile():
     return render_template('profile.html',
                            name=current_user.name,
                            title='OSP | Profile',
+                           favProjsCount=Favorites.query.filter(
+                               and_(Favorites.user_id==current_user.id,
+                                    Favorites.fav_type=='project')).count(),
+                           favOrgsCount=Favorites.query.filter(
+                               and_(Favorites.user_id==current_user.id,
+                                    Favorites.fav_type=='org')).count(),
                            favorites=Favorites.query.filter(
                                Favorites.user_id==current_user.id))
 

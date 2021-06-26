@@ -5,6 +5,7 @@
   Welcome, {{ name }}!
 </h2>
 
+{% if favProjsCount != 0 %}
 <h3>Favorite Projects:</h3>
 
 <ul>
@@ -14,7 +15,9 @@
   {% endif %}
   {% endfor %}
 </ul>
+{% endif %}
 
+{% if favOrgsCount != 0 %}
 <h3>Favorite Organizations:</h3>
 
 <ul>
@@ -24,5 +27,6 @@
   {% endif %}
   {% endfor %}
 </ul>
-    
+{% endif %}
+
 {% endblock %}
