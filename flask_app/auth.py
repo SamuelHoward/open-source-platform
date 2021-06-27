@@ -22,7 +22,6 @@ def login():
         # Get the data from the form
         email = request.form.get('email')
         password = request.form.get('password')
-        remember = True if request.form.get('remember') else False
 
         # Get the data for the potential logged in user
         name_q = db.session.query(Users.name).filter(Users.email==email)
@@ -46,7 +45,7 @@ def login():
                      password=pass_q.first()[0])
 
         # Login the user
-        login_user(user, remember=remember)
+        login_user(user)
 
         # Load the user's profile page
         return redirect(url_for('main.profile'))
