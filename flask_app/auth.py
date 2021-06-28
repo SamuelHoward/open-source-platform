@@ -85,8 +85,11 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
 
+        # Login the new user
+        login_user(new_user)
+        
         # Load the login page
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('main.profile'))
 
     # Render the signup page
     else:
