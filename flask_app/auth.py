@@ -1,16 +1,29 @@
 # Import necessary modules
 from flask import Blueprint
-from flask_app import db
+from flask_app import db, app
 from flask_login import login_user
 from flask_app.models import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, redirect, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, logout_user, login_required
+from flask_mail import Message, Mail
 import random
 
 # This files includes all the routes for authentication
 auth = Blueprint('auth', __name__)
+
+# Set up mail instance
+app.config.update(
+    MAIL_USERNAME = 'theopensourceplatform@gmail.com',
+    MAIL_PASSWORD = 'notThePassword',
+    MAIL_PORT=465,
+    MAIL_USE_SSL = True,
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_DEFAULT_SENDER= \
+    '"TheOpenSourcePlatform" <theopensourceplatform@gmail.com>')
+
+mail = Mail(app)
 
 # Route for logging in
 @auth.route('/login', methods=['GET', 'POST'])
@@ -85,6 +98,11 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
 
+        # Craft the confirmation email and send it
+        msg = Message("Open Source Platform | Signup Confirmation",
+                      recipients=[email])
+        mail.send(msg)
+        
         # Login the new user
         login_user(new_user)
         
