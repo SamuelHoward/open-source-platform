@@ -88,6 +88,20 @@ button.unfav {
     color: #ADE8F4;
 }
 
+button.proj_fav {
+    float: left;
+}
+
+button.proj_unfav {
+    float: left;
+    background-color: #03045E;
+    color: #ADE8F4;
+}
+
+.org_proj_item {
+    float: left;
+}
+
 .forks_watchers {
     clear: both;
 }

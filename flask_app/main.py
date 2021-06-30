@@ -417,7 +417,7 @@ def organization(orgName):
         favorite=Favorites.query.filter(
             and_(Favorites.user_id==current_user.id,
                  Favorites.fav_name==request.form['fav_name'],
-                 Favorites.fav_type=='project')).first()
+                 Favorites.fav_type=='org')).first()
 
         # If the favorite does not exist, create it
         if favorite is None:
@@ -452,6 +452,48 @@ def organization(orgName):
         # Refresh the page after unfavoriting
         return redirect(request.path)
 
+    # Logic for favoriting project on org page
+    elif request.method == 'POST' and 'proj_fav_name' in request.form:
+
+        # Look for whether the proj exists
+        favorite=Favorites.query.filter(
+            and_(Favorites.user_id==current_user.id,
+                 Favorites.fav_name==request.form['proj_fav_name'],
+                 Favorites.fav_type=='project')).first()
+
+        # If the favorite does not exist, create it
+        if favorite is None:
+
+            # Create the Favorites record
+            new_fav = Favorites(
+                id=random.randint(-9223372036854775808, 9223372036854775807),
+                user_id=current_user.id,
+                fav_name=request.form['proj_fav_name'],
+                fav_type='project')
+
+            # Add the favorite and commit it
+            db.session.add(new_fav)
+            db.session.commit()
+
+        # Refresh the page after favoriting
+        return redirect(request.path)
+
+    # Logic for unfavoriting proj on org page
+    elif request.method == 'POST' and 'proj_unfav_name' in request.form:
+
+        # Look for the existing Favorites record
+        fav = db.session.query(Favorites).filter(
+            and_(Favorites.user_id==current_user.id,
+                 Favorites.fav_name==request.form['proj_unfav_name'],
+                 Favorites.fav_type=='project')).first()
+
+        # Delete the favorites record and commit
+        db.session.delete(fav)
+        db.session.commit()
+
+        # Refresh the page after unfavoriting
+        return redirect(request.path)
+
     # Try to render the page for the org
     try:
 
@@ -469,6 +511,10 @@ def organization(orgName):
                 favorites=Favorites.query.filter(
                     and_(Favorites.user_id==current_user.id,
                          Favorites.fav_type=='org')) \
+                .with_entities(Favorites.fav_name),
+                proj_favs=Favorites.query.filter(
+                    and_(Favorites.user_id==current_user.id,
+                         Favorites.fav_type=='project')) \
                 .with_entities(Favorites.fav_name))
 
         # Render the page for anonymous users
@@ -478,7 +524,8 @@ def organization(orgName):
                 organization=org,
                 projects=projs,
                 title='OSP | ' + orgName,
-                favorites=[])
+                favorites=[],
+                proj_favs=[])
 
     # If page rendering fails, render the 404 page
     except:
