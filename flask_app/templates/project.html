@@ -76,7 +76,19 @@
 <ul>
   {% for proj in projects %}
   {% if proj.owner == project.owner %}
-  <li><a href={{ proj.url }}>{{ proj.name }}</a></li>
+  <li><a href={{ proj.url }} class="org_proj_item">{{ proj.name }}&nbsp;&nbsp;</a>
+  {% if current_user.is_authenticated %}
+  <form method="POST">
+    {% if (proj.name,) not in favorites %}
+    <button type="submit" name="fav_name" value={{ proj.name }} class="fav">Favorite</button>
+    {% else %}
+    <button type="submit" name="unfav_name" value={{ proj.name }} class="unfav">Favorited</button>
+    {% endif %}
+  </form>
+  &nbsp;
+  {% endif %}
+  </li>
+  
   {% endif %}
   {% endfor %}
 </ul>
