@@ -8,6 +8,85 @@
 {% if favProjsCount != 0 %}
 <h3>Favorite Projects:</h3>
 
+{% for project in projects %}
+
+{% if (project.name,) in favProjs %}
+
+<div class="project-card">
+  <div class="container">
+    <div class="project-text">
+      <span class="project_title"><a  href={{ project.url }}><h3>{{ project.name }}</h3></a></span>
+      {% if project.created_time is not none %}
+      <span class="created_text"> Created {{project.created_time[0:10]}} &nbsp;&nbsp;</span>
+      {% endif %}
+
+      <div class="forks_watchers">
+
+	<!--
+	{% if current_user.is_authenticated %}
+	<form method="POST">
+	  {% if (project.name,) not in favorites %}
+	  <button type="submit" name="fav_name" value={{ project.name }} class="fav">Favorite</button>
+	  {% else %}
+	  <button type="submit" name="unfav_name" value={{ project.name }} class="unfav">Favorited</button>
+	  {% endif %}
+	</form>
+	&nbsp;
+	{% endif %}
+	-->
+
+	{% if project.forks is not none %}
+	{% if project.forks == 1 %}
+	<a  href={{ project.url + "/network/members" }}>{{project.forks}} fork &nbsp;&nbsp;</a>
+	{% elif project.forks != 0 %}
+	<a  href={{ project.url + "/network/members" }}>{{project.forks}} forks &nbsp;&nbsp;</a>
+	{% endif %}
+	{% endif %}
+
+	{% if project.watchers is not none %}
+	{% if project.watchers == 1 %}
+	<a  href={{ project.url + "/watchers" }}>{{project.watchers}} watcher &nbsp;&nbsp;</a>
+	{% elif project.watchers != 0 %}
+	<a  href={{ project.url + "/watchers" }}>{{project.watchers}} watchers &nbsp;&nbsp;</a>
+	{% endif %}
+	{% endif %}
+
+	{% if project.open_issues is not none %}
+	{% if project.open_issues == 1 %}
+	<a  href={{ project.url + "/issues" }}>{{project.open_issues}} issue &nbsp;&nbsp;</a>
+	{% elif project.open_issues != 0 %}
+	<a  href={{ project.url + "/issues" }}>{{project.open_issues}} issues &nbsp;&nbsp;</a>
+	{% endif %}
+	{% endif %}
+
+      </div>
+      <div class="project_description">
+	<p><a href={{ url_for('project', projectName=project.name) }}> {{ project.description }} </a></p>
+      </div>
+    </div>
+    {% if project.owner is not none %}
+    <b><a href={{"https://github.com/" + project.owner}}>{{ project.owner }}</a></b>
+    {% endif %}
+    {% if project.owner_avatar is not none %}
+    {% if project.owner_type == "User" %}
+    <a href={{ url_for('organization', orgName=project.owner)}}><img src={{ project.owner_avatar }} width="30" class="proj-user-pic"></a>
+    {% else %}
+    <a href={{ url_for('organization', orgName=project.owner)}}><img src={{ project.owner_avatar }} width="30" class="proj-org-pic"></a>
+    {% endif %}
+    {% endif %}
+    <b class="source">{{ project.source }}</b>
+    {% if project.language is not none %}
+    <b class="source">{{ project.language }}</b>
+    {% endif %}
+  </div>
+</div>
+
+{% endif %}
+
+{% endfor %}
+
+
+<!--
 <ul>
   {% for project in favorites %}
   {% if project.fav_type == 'project' %}
@@ -15,11 +94,60 @@
   {% endif %}
   {% endfor %}
 </ul>
+-->
+
 {% endif %}
 
 {% if favOrgsCount != 0 %}
-<h3>Favorite Organizations:</h3>
+<h3 class="card_break">Favorite Organizations:</h3>
 
+{% for organization in organizations %}
+
+{% if (organization.name,) in favOrgs %}
+
+<div class="project-card">
+  <div class="container">
+    <div class="project-text">
+      <h3><a href={{ organization.url }}>{{ organization.name }}</a></h3>
+
+      <div class="forks_watchers">
+
+	<!--
+	{% if current_user.is_authenticated %}
+	<form method="POST">
+	  {% if (organization.name,) not in favorites %}
+	  <button type="submit" name="fav_name" value={{ organization.name }} class="fav">Favorite</button>
+	  {% else %}
+	  <button type="submit" name="unfav_name" value={{ organization.name }} class="unfav">Favorited</button>
+	  {% endif %}
+	</form>
+	&nbsp;
+	{% endif %}
+	-->
+      </div>
+      {% if organization.avatar is not none %}
+      {% if organization.owner_type == "User" %}
+      <a href={{ url_for('organization', orgName=organization.name)}}><img src={{ organization.avatar }} width="80" class="user-pic"></a>
+      {% else %}
+      <a href={{ url_for('organization', orgName=organization.name)}}><img src={{ organization.avatar }} width="80" class="org-pic"></a>
+      {% endif %}
+      {% endif %}
+      <ul>
+	{% for project in projects %}
+	{% if project.owner == organization.name %}
+	<li><a href={{ project.url }}>{{ project.name }}</a></li>
+	{% endif %}
+	{% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
+{% endfor %}
+
+<!--
 <ul>
   {% for org in favorites %}
   {% if org.fav_type == 'org' %}
@@ -27,6 +155,7 @@
   {% endif %}
   {% endfor %}
 </ul>
+-->
 {% endif %}
 
 {% endblock %}

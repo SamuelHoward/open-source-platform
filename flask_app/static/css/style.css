@@ -25,6 +25,10 @@ div {
     margin-left: 8px;
 }
 
+.card_break {
+    clear:both;
+}
+
 .header {
     background-color: #CAF0F8;
     overflow: visible;

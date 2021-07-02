@@ -540,6 +540,18 @@ def profile():
     return render_template('profile.html',
                            name=current_user.name,
                            title='OSP | Profile',
+                           projects=Projects.query.all(),
+                           organizations=Organizations.query.all(),
+                           favProjs=Favorites.query.filter(
+                               and_(Favorites.user_id==current_user.id,
+                                    Favorites.fav_type=='project')) \
+                           .with_entities(
+                               Favorites.fav_name),
+                           favOrgs=Favorites.query.filter(
+                               and_(Favorites.user_id==current_user.id,
+                                    Favorites.fav_type=='org')) \
+                           .with_entities(
+                               Favorites.fav_name),
                            favProjsCount=Favorites.query.filter(
                                and_(Favorites.user_id==current_user.id,
                                     Favorites.fav_type=='project')).count(),
