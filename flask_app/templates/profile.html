@@ -22,18 +22,12 @@
 
       <div class="forks_watchers">
 
-	<!--
 	{% if current_user.is_authenticated %}
 	<form method="POST">
-	  {% if (project.name,) not in favorites %}
-	  <button type="submit" name="fav_name" value={{ project.name }} class="fav">Favorite</button>
-	  {% else %}
-	  <button type="submit" name="unfav_name" value={{ project.name }} class="unfav">Favorited</button>
-	  {% endif %}
+	  <button type="submit" name="proj_unfav_name" value={{ project.name }} class="unfav">Favorited</button>
 	</form>
 	&nbsp;
 	{% endif %}
-	-->
 
 	{% if project.forks is not none %}
 	{% if project.forks == 1 %}
@@ -112,18 +106,13 @@
 
       <div class="forks_watchers">
 
-	<!--
 	{% if current_user.is_authenticated %}
 	<form method="POST">
-	  {% if (organization.name,) not in favorites %}
-	  <button type="submit" name="fav_name" value={{ organization.name }} class="fav">Favorite</button>
-	  {% else %}
 	  <button type="submit" name="unfav_name" value={{ organization.name }} class="unfav">Favorited</button>
-	  {% endif %}
 	</form>
 	&nbsp;
 	{% endif %}
-	-->
+	
       </div>
       {% if organization.avatar is not none %}
       {% if organization.owner_type == "User" %}

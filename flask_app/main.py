@@ -532,10 +532,42 @@ def organization(orgName):
         return render_template('404.html', title='OSP | 404'), 404
 
 # Route for profile page
-@main.route('/profile')
+@main.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
 
+    # Logic for unfavoriting the org
+    if request.method == 'POST' and 'unfav_name' in request.form:
+
+        # Look for the existing Favorites record
+        fav = db.session.query(Favorites).filter(
+            and_(Favorites.user_id==current_user.id,
+                 Favorites.fav_name==request.form['unfav_name'],
+                 Favorites.fav_type=='org')).first()
+
+        # Delete the favorites record and commit
+        db.session.delete(fav)
+        db.session.commit()
+
+        # Refresh the page after unfavoriting
+        return redirect(request.path)
+
+    # Logic for unfavoriting proj on org page
+    elif request.method == 'POST' and 'proj_unfav_name' in request.form:
+
+        # Look for the existing Favorites record
+        fav = db.session.query(Favorites).filter(
+            and_(Favorites.user_id==current_user.id,
+                 Favorites.fav_name==request.form['proj_unfav_name'],
+                 Favorites.fav_type=='project')).first()
+
+        # Delete the favorites record and commit
+        db.session.delete(fav)
+        db.session.commit()
+
+        # Refresh the page after unfavoriting
+        return redirect(request.path)
+    
     # Render the profile for a logged in user
     return render_template('profile.html',
                            name=current_user.name,
