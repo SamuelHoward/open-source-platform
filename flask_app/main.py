@@ -15,7 +15,8 @@ orgs_search_results_data = Organizations.query.filter(
     Organizations.name.contains(""))
 projects_search_results_data = Projects.query.filter(
     Projects.description.contains(""))
-search_term = None
+proj_search_term = None
+org_search_term = None
 projectsPerPage = 25
 orgsPerPage = 25
 
@@ -33,7 +34,7 @@ def projects():
 
     # Pull in the necessary global variables
     global projects_search_results_data
-    global search_term
+    global proj_search_term
     global projectsPerPage
 
     # Get the page number from request arguments
@@ -43,15 +44,15 @@ def projects():
     if request.method == 'POST' and 'search_term' in request.form:
 
         # Pull in search term from search form
-        search_term=request.form['search_term']
+        proj_search_term=request.form['search_term']
         
         # Basic search logic: Look in project parameters for search term
         projects_search_results_data = Projects.query.filter(
-        or_(Projects.description.contains(search_term),
-                Projects.name.contains(search_term),
-                Projects.language.contains(search_term),
-                Projects.owner.contains(search_term),
-                Projects.source.contains(search_term)))
+        or_(Projects.description.contains(proj_search_term),
+                Projects.name.contains(proj_search_term),
+                Projects.language.contains(proj_search_term),
+                Projects.owner.contains(proj_search_term),
+                Projects.source.contains(proj_search_term)))
 
         # Pull in the item per page count, if necessary
         if 'per_page' in request.form:
@@ -186,7 +187,7 @@ def projects():
                 search_results=projects_search_results_data.paginate(
                     page=page,
                     per_page=projectsPerPage),
-                search_term=search_term,
+                search_term=proj_search_term,
                 title='OSP | Projects',
                 favorites=Favorites.query.filter(
                     and_(Favorites.user_id==current_user.id,
@@ -203,7 +204,7 @@ def projects():
                 search_results=projects_search_results_data.paginate(
                     page=page,
                     per_page=projectsPerPage),
-                search_term=search_term,
+                search_term=proj_search_term,
                 title='OSP | Projects',
                 favorites=[])
 
@@ -213,7 +214,7 @@ def organizations():
 
     # Bring in te necessary global variables
     global orgs_search_results_data
-    global search_term
+    global org_search_term
     global orgsPerPage
 
     # Bring in the page number from the arguments
@@ -223,11 +224,11 @@ def organizations():
     if request.method == 'POST' and 'search_term' in request.form:
 
         # Bring in the search term from the form
-        search_term=request.form['search_term']
+        org_search_term=request.form['search_term']
 
         # Perform search by looking for search term in org names
         orgs_search_results_data = Organizations.query.filter(
-            Organizations.name.contains(search_term))
+            Organizations.name.contains(org_search_term))
 
         # Pull in the item count per page if necessary
         if 'per_page' in request.form:
@@ -301,7 +302,7 @@ def organizations():
                 search_results=orgs_search_results_data.paginate(
                     page=page,
                     per_page=orgsPerPage),
-                search_term=search_term,
+                search_term=org_search_term,
                 projects=Projects.query.all(),
                 title='OSP | Organizations',
                 favorites=Favorites.query.filter(
@@ -318,7 +319,7 @@ def organizations():
                 search_results=orgs_search_results_data.paginate(
                     page=page,
                     per_page=orgsPerPage),
-                search_term=search_term,
+                search_term=org_search_term,
                 projects=Projects.query.all(),
                 title='OSP | Organizations',
                 favorites=[])
