@@ -1,6 +1,6 @@
 # Import necessary modules
 from flask_app import app, db
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from flask_app.models import *
 from sqlalchemy import or_, and_, func
 from flask import Blueprint
@@ -158,6 +158,9 @@ def projects():
             db.session.add(new_fav)
             db.session.commit()
 
+            # Flash add message
+            flash('Added ' + request.form['fav_name'] + ' to favorites')
+            
         # Refresh the page after favoriting
         return redirect(request.path)
 
@@ -174,6 +177,9 @@ def projects():
         db.session.delete(fav)
         db.session.commit()
 
+        # Flash delete message
+        flash('Removed ' + request.form['unfav_name'] + ' from favorites')
+        
         # Refresh the page after unfavoriting
         return redirect(request.path)
 
@@ -273,6 +279,9 @@ def organizations():
             db.session.add(new_fav)
             db.session.commit()
 
+            # Flash add message
+            flash('Added ' + request.form['fav_name'] + ' to favorites')
+            
         # Refresh the page after searching
         return redirect(request.path)
 
@@ -289,6 +298,9 @@ def organizations():
         db.session.delete(fav)
         db.session.commit()
 
+        # Flash delete message
+        flash('Removed ' + request.form['unfav_name'] + ' from favorites')
+        
         # Refresh the page after unfavoriting
         return redirect(request.path)
 
@@ -347,6 +359,9 @@ def project(projectName):
                 fav_name=request.form['fav_name'],
                 fav_type='project')
 
+            # Flash add message
+            flash('Added ' + request.form['fav_name'] + ' to favorites')
+            
             # Add and commit the Favorites record
             db.session.add(new_fav)
             db.session.commit()
@@ -367,6 +382,9 @@ def project(projectName):
         db.session.delete(fav)
         db.session.commit()
 
+        # Flash delete message
+        flash('Removed ' + request.form['unfav_name'] + ' from favorites')
+        
         # Refresh the page after unfavoriting
         return redirect(request.path)
 
@@ -434,6 +452,9 @@ def organization(orgName):
             db.session.add(new_fav)
             db.session.commit()
 
+            # Flash add message
+            flash('Added ' + request.form['fav_name'] + ' to favorites')
+            
         # Refresh the page after favoriting
         return redirect(request.path)
 
@@ -450,6 +471,9 @@ def organization(orgName):
         db.session.delete(fav)
         db.session.commit()
 
+        # Flash delete message
+        flash('Removed ' + request.form['unfav_name'] + ' from favorites')
+        
         # Refresh the page after unfavoriting
         return redirect(request.path)
 
@@ -471,11 +495,14 @@ def organization(orgName):
                 user_id=current_user.id,
                 fav_name=request.form['proj_fav_name'],
                 fav_type='project')
-
+            
             # Add the favorite and commit it
             db.session.add(new_fav)
             db.session.commit()
 
+            # Flash add message
+            flash('Added ' + request.form['proj_fav_name'] + ' to favorites')
+            
         # Refresh the page after favoriting
         return redirect(request.path)
 
@@ -487,11 +514,14 @@ def organization(orgName):
             and_(Favorites.user_id==current_user.id,
                  Favorites.fav_name==request.form['proj_unfav_name'],
                  Favorites.fav_type=='project')).first()
-
+        
         # Delete the favorites record and commit
         db.session.delete(fav)
         db.session.commit()
-
+        
+        # Flash delete message
+        flash('Removed ' + request.form['proj_unfav_name'] + ' from favorites')
+        
         # Refresh the page after unfavoriting
         return redirect(request.path)
 
@@ -550,6 +580,9 @@ def profile():
         db.session.delete(fav)
         db.session.commit()
 
+        # Flash delete message
+        flash('Removed ' + request.form['unfav_name'] + ' from favorites')
+        
         # Refresh the page after unfavoriting
         return redirect(request.path)
 
@@ -566,6 +599,9 @@ def profile():
         db.session.delete(fav)
         db.session.commit()
 
+        # Flash delete message
+        flash('Removed ' + request.form['proj_unfav_name'] + ' from favorites')
+        
         # Refresh the page after unfavoriting
         return redirect(request.path)
     
