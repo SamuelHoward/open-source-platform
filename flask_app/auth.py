@@ -120,4 +120,8 @@ def logout():
 
     # Log out the user and return to homepage
     logout_user()
+
+    # Flash log out message
+    flash('Successfully logged out')
+    
     return redirect(url_for('index'))
