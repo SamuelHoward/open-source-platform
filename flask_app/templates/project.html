@@ -83,7 +83,7 @@
 
 <ul>
   {% for proj in projects %}
-  {% if proj.owner == project.owner %}
+  {% if proj.owner == project.owner and proj.name != project.name %}
   <li><a href={{ proj.url }} class="org_proj_item">{{ proj.name }}&nbsp;&nbsp;</a>
   {% if current_user.is_authenticated %}
   <form method="POST">
