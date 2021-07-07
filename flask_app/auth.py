@@ -60,6 +60,9 @@ def login():
         # Login the user
         login_user(user)
 
+        # Flash login message
+        flash('Successfully logged in')
+        
         # Load the user's profile page
         return redirect(url_for('main.profile'))
 
@@ -105,6 +108,9 @@ def signup():
         
         # Login the new user
         login_user(new_user)
+
+        # flash sign up message
+        flash('Successfully signed in')
         
         # Load the login page
         return redirect(url_for('main.profile'))
