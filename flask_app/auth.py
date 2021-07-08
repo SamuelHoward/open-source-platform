@@ -8,6 +8,7 @@ from flask import render_template, request, redirect, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, logout_user, login_required
 from flask_mail import Message, Mail
+import local_settings
 import random
 
 # This files includes all the routes for authentication
@@ -16,7 +17,7 @@ auth = Blueprint('auth', __name__)
 # Set up mail instance
 app.config.update(
     MAIL_USERNAME = 'theopensourceplatform@gmail.com',
-    MAIL_PASSWORD = 'notThePassword',
+    MAIL_PASSWORD = local_settings.MAIL_PASSWORD,
     MAIL_PORT=465,
     MAIL_USE_SSL = True,
     MAIL_SERVER='smtp.gmail.com',
