@@ -409,7 +409,9 @@ def project(projectName):
                 favorites=Favorites.query.filter(
                     and_(Favorites.user_id==current_user.id,
                          Favorites.fav_type=='project')) \
-                .with_entities(Favorites.fav_name))
+                .with_entities(Favorites.fav_name),
+                favCount=Favorites.query.filter(
+                    Favorites.fav_name==projectName).count())
         
         # Render the page for anonymous users
         except:
@@ -419,7 +421,9 @@ def project(projectName):
                 projects=projs,
                 count=count,
                 title='OSP | ' + projectName,
-                favorites=[])
+                favorites=[],
+                favCount=Favorites.query.filter(
+                    Favorites.fav_name==projectName).count())
 
     # If the project does not exist, render the 404 page
     except:
@@ -546,7 +550,9 @@ def organization(orgName):
                 proj_favs=Favorites.query.filter(
                     and_(Favorites.user_id==current_user.id,
                          Favorites.fav_type=='project')) \
-                .with_entities(Favorites.fav_name))
+                .with_entities(Favorites.fav_name),
+                favCount=Favorites.query.filter(
+                    Favorites.fav_name==orgName).count())
 
         # Render the page for anonymous users
         except:
@@ -556,7 +562,9 @@ def organization(orgName):
                 projects=projs,
                 title='OSP | ' + orgName,
                 favorites=[],
-                proj_favs=[])
+                proj_favs=[],
+                favCount=Favorites.query.filter(
+                    Favorites.fav_name==orgName).count())
 
     # If page rendering fails, render the 404 page
     except:

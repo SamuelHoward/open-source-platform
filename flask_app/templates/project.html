@@ -50,6 +50,10 @@
   <a  href={{ project.url + "/issues" }}>{{project.open_issues}} issues &nbsp;&nbsp;</a>
   {% endif %}
   {% endif %}
+
+  {% if favCount != 0 %}
+  {{ favCount }} favorites
+  {% endif %}
   
 </div>
 <div class="project_description">

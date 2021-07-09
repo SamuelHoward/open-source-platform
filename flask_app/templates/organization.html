@@ -22,6 +22,12 @@
   </form>
   &nbsp;
   {% endif %}
+
+  {% if favCount != 0 %}
+  <div class="forks_watchers">
+    {{ favCount }} favorites
+  </div>
+  {% endif %}
   
   {% if organization.avatar is not none %}
   {% if organization.owner_type == "User" %}
