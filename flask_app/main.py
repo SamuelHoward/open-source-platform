@@ -1,10 +1,9 @@
 # Import necessary modules
+from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_app import app, db
-from flask import render_template, request, redirect, url_for, flash
 from flask_app.models import *
-from sqlalchemy import or_, and_, func
-from flask import Blueprint
 from flask_login import login_required, current_user
+from sqlalchemy import or_, and_, func
 import random
 
 # This file includes all main routes (no login related routes)

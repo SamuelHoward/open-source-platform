@@ -1,13 +1,12 @@
 # Import necessary modules
-from flask import Blueprint
+from flask import Blueprint, render_template, request, redirect, url_for, \
+    request, flash
 from flask_app import db, app
-from flask_login import login_user
 from flask_app.models import *
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask import render_template, request, redirect, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, logout_user, login_required
 from flask_mail import Message, Mail
+from werkzeug.security import generate_password_hash, check_password_hash
 import random
 import os
 
