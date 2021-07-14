@@ -148,7 +148,7 @@ def projects():
 
             # Form the Favorites object
             new_fav = Favorites(
-                id=random.randint(-9223372036854775808, 9223372036854775807),
+                id=random.randint(-2147483648, 2147483647),
                 user_id=current_user.id,
                 fav_name=request.form['fav_name'],
                 fav_type='project')
@@ -269,7 +269,7 @@ def organizations():
 
             # Form the favorites record
             new_fav = Favorites(
-                id=random.randint(-9223372036854775808, 9223372036854775807),
+                id=random.randint(-2147483648, 2147483647),
                 user_id=current_user.id,
                 fav_name=request.form['fav_name'],
                 fav_type='org')
@@ -353,7 +353,7 @@ def project(projectName):
             
             # Create the Favorites record
             new_fav = Favorites(
-                id=random.randint(-9223372036854775808, 9223372036854775807),
+                id=random.randint(-2147483648, 2147483647),
                 user_id=current_user.id,
                 fav_name=request.form['fav_name'],
                 fav_type='project')
@@ -446,7 +446,7 @@ def organization(orgName):
 
             # Create the Favorites record
             new_fav = Favorites(
-                id=random.randint(-9223372036854775808, 9223372036854775807),
+                id=random.randint(-2147483648, 2147483647),
                 user_id=current_user.id,
                 fav_name=request.form['fav_name'],
                 fav_type='org')
@@ -494,7 +494,7 @@ def organization(orgName):
 
             # Create the Favorites record
             new_fav = Favorites(
-                id=random.randint(-9223372036854775808, 9223372036854775807),
+                id=random.randint(-2147483648, 2147483647),
                 user_id=current_user.id,
                 fav_name=request.form['proj_fav_name'],
                 fav_type='project')

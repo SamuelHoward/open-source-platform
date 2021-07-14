@@ -10,3 +10,6 @@ jsonpointer==1.10
 jsonschema==2.6.0
 SQLAlchemy==1.4.15
 virtualenv==20.4.6
+alembic==1.6.5
+Flask-Migrate==3.0.1
+psycopg2==2.7.7

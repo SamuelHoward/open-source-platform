@@ -92,7 +92,7 @@ def signup():
 
         # Create the Users record
         new_user = Users(
-            id=random.randint(-9223372036854775808, 9223372036854775807),
+            id=random.randint(-2147483648, 2147483647),
             email=email,
             name=name,
             password=generate_password_hash(password, method='sha256'))
