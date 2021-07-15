@@ -611,23 +611,33 @@ def profile():
         
         # Refresh the page after unfavoriting
         return redirect(request.path)
+
+    #
+    favProjs=Favorites.query.filter(
+        and_(Favorites.user_id==current_user.id,
+             Favorites.fav_type=='project')) \
+                            .with_entities(
+                                Favorites.fav_name)
+
+    #
+    projects=db.session.query(Projects).filter(Projects.name.in_(favProjs))
+
+    #
+    favOrgs=Favorites.query.filter(
+        and_(Favorites.user_id==current_user.id,
+             Favorites.fav_type=='org')) \
+                           .with_entities(
+                               Favorites.fav_name)
+
+    #
+    organizations=db.session.query(Organizations).filter(Organizations.name.in_(favOrgs))
     
     # Render the profile for a logged in user
     return render_template('profile.html',
                            name=current_user.name,
                            title='OSP | Profile',
-                           projects=Projects.query.all(),
-                           organizations=Organizations.query.all(),
-                           favProjs=Favorites.query.filter(
-                               and_(Favorites.user_id==current_user.id,
-                                    Favorites.fav_type=='project')) \
-                           .with_entities(
-                               Favorites.fav_name),
-                           favOrgs=Favorites.query.filter(
-                               and_(Favorites.user_id==current_user.id,
-                                    Favorites.fav_type=='org')) \
-                           .with_entities(
-                               Favorites.fav_name),
+                           projects=projects,
+                           organizations=organizations,
                            favProjsCount=Favorites.query.filter(
                                and_(Favorites.user_id==current_user.id,
                                     Favorites.fav_type=='project')).count(),
@@ -635,7 +645,8 @@ def profile():
                                and_(Favorites.user_id==current_user.id,
                                     Favorites.fav_type=='org')).count(),
                            favorites=Favorites.query.filter(
-                               Favorites.user_id==current_user.id))
+                               Favorites.user_id==current_user.id),
+                           subProjects=Projects.query.all())
 
 
 # Route for 404 page

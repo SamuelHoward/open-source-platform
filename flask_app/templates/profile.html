@@ -18,7 +18,7 @@
 
 {% for project in projects %}
 
-{% if (project.name,) in favProjs %}
+
 
 <div class="project-card">
   <div class="container">
@@ -83,8 +83,6 @@
   </div>
 </div>
 
-{% endif %}
-
 {% endfor %}
 
 
@@ -104,8 +102,6 @@
 <h3 class="card_break">Favorite Organizations:</h3>
 
 {% for organization in organizations %}
-
-{% if (organization.name,) in favOrgs %}
 
 <div class="project-card">
   <div class="container">
@@ -130,7 +126,7 @@
       {% endif %}
       {% endif %}
       <ul>
-	{% for project in projects %}
+	{% for project in subProjects %}
 	{% if project.owner == organization.name %}
 	<li><a href={{ project.url }}>{{ project.name }}</a></li>
 	{% endif %}
@@ -139,8 +135,6 @@
     </div>
   </div>
 </div>
-
-{% endif %}
 
 {% endfor %}
 
