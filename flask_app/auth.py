@@ -51,21 +51,28 @@ def login():
                 flash('Please check your login details and try again.')
                 return redirect(url_for('auth.login'))
 
-        # Find the correctly authenticated user
-        user = Users(id=id_q.first()[0],
-                     email=email,
-                     name=name_q.first()[0],
-                     password=pass_q.first()[0])
+            # Find the correctly authenticated user
+            user = Users(id=id_q.first()[0],
+                         email=email,
+                         name=name_q.first()[0],
+                         password=pass_q.first()[0])
 
-        # Login the user
-        login_user(user)
+            # Login the user
+            login_user(user)
+            
+            # Flash login message
+            flash('Successfully logged in')
+            
+            # Load the user's profile page
+            return redirect(url_for('main.profile'))
 
-        # Flash login message
-        flash('Successfully logged in')
+        # if the user does not exist, do not log in
+        else:
+
+            # Inform the user that the entered email is incorrect
+            flash('The email you entered is not associated with an account.')
+            return redirect(url_for('auth.login'))
         
-        # Load the user's profile page
-        return redirect(url_for('main.profile'))
-
     # Render the login page
     else:
         return render_template('login.html', title='OSP | Login')
