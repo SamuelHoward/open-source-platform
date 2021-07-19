@@ -2,6 +2,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, \
     request, flash
 from flask_app import db, app
+from flask_app.token import generate_confirmation_token, confirm_token
 from flask_app.models import *
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, logout_user, login_required
@@ -9,6 +10,7 @@ from flask_mail import Message, Mail
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
 import os
+import datetime
 
 # This files includes all the routes for authentication
 auth = Blueprint('auth', __name__)
@@ -102,15 +104,21 @@ def signup():
             id=random.randint(-2147483648, 2147483647),
             email=email,
             name=name,
-            password=generate_password_hash(password, method='sha256'))
+            password=generate_password_hash(password, method='sha256'),
+            confirmed=False)
 
+        token = generate_confirmation_token(email)
+        confirm_url = url_for('auth.confirm_email', token=token, _external=True)
+        html = render_template('activate.html', confirm_url=confirm_url)
+        
         # Add the user and commit
         db.session.add(new_user)
         db.session.commit()
 
         # Craft the confirmation email and send it
         msg = Message("Open Source Platform | Signup Confirmation",
-                      recipients=[email])
+                      recipients=[email],
+                      html=html)
         mail.send(msg)
         
         # Login the new user
@@ -126,6 +134,25 @@ def signup():
     else:
         return render_template('signup.html', title='OSP | Sign up')
 
+
+@auth.route('/confirm/<token>')
+@login_required
+def confirm_email(token):
+    try:
+        email = confirm_token(token)
+    except:
+        flash('The confirmation link is invalid or has expired.', 'danger')
+    user = Users.query.filter_by(email=email).first_or_404()
+    if user.confirmed:
+        flash('Account already confirmed. Please login.', 'success')
+    else:
+        user.confirmed = True
+        user.confirmed_on = datetime.datetime.now()
+        db.session.add(user)
+        db.session.commit()
+        flash('You have confirmed your account. Thanks!', 'success')
+    return redirect(url_for('main.profile'))
+    
 # Route for logging out
 @auth.route('/logout')
 @login_required

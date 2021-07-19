@@ -36,7 +36,9 @@ class Users(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
-
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
+    # confirmed_on = db.Column(db.DateTime, nullable=True)
+    
 class Favorites(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
