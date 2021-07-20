@@ -41,8 +41,13 @@
 	    <a href= {{ url_for('auth.signup') }}>Sign Up</a>
 	    {% endif %}
 	    {% if current_user.is_authenticated %}
+	    {% if current_user.confirmed %}
 	    &nbsp;&nbsp;&nbsp;&nbsp;
 	    <a href= {{ url_for('main.profile') }}>Profile</a>
+	    {% else %}
+	    &nbsp;&nbsp;&nbsp;&nbsp;
+	    <a href= {{ url_for('auth.unconfirmed') }}>Confirm</a>
+	    {% endif %}
 	    &nbsp;&nbsp;&nbsp;&nbsp;
 	    <a href= {{ url_for('auth.logout') }}>Log out</a>
 	    {% endif %}
@@ -70,8 +75,13 @@
 	    <a href= {{ url_for('auth.signup') }}>Sign Up</a>
 	    {% endif %}
 	    {% if current_user.is_authenticated %}
+	    {% if current_user.confirmed %}
 	    &nbsp;&nbsp;&nbsp;&nbsp;
 	    <a href= {{ url_for('main.profile') }}>Profile</a>
+	    {% else %}
+	    &nbsp;&nbsp;&nbsp;&nbsp;
+	    <a href= {{ url_for('auth.unconfirmed') }}>Confirm</a>
+	    {% endif %}
 	    &nbsp;&nbsp;&nbsp;&nbsp;
 	    <a href= {{ url_for('auth.logout') }}>Log out</a>
 	    {% endif %}

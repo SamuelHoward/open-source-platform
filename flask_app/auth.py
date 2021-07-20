@@ -5,7 +5,7 @@ from flask_app import db, app
 from flask_app.token import generate_confirmation_token, confirm_token
 from flask_app.models import *
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message, Mail
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
@@ -128,7 +128,7 @@ def signup():
         flash('Successfully signed in')
         
         # Load the login page
-        return redirect(url_for('main.profile'))
+        return redirect(url_for('auth.unconfirmed'))
 
     # Render the signup page
     else:
@@ -152,7 +152,29 @@ def confirm_email(token):
         db.session.commit()
         flash('You have confirmed your account. Thanks!', 'success')
     return redirect(url_for('main.profile'))
-    
+
+@auth.route('/unconfirmed')
+@login_required
+def unconfirmed():
+    if current_user.confirmed:
+        return redirect(url_for('index'))
+    flash('Please confirm your account!', 'warning')
+    return render_template('unconfirmed.html')
+
+@auth.route('/resend')
+@login_required
+def resend_confirmation():
+    token = generate_confirmation_token(current_user.email)
+    confirm_url = url_for('auth.confirm_email', token=token, _external=True)
+    html = render_template('activate.html', confirm_url=confirm_url)
+    subject = "Please confirm your email"
+    msg = Message("Open Source Platform | Signup Confirmation",
+                  recipients=[current_user.email],
+                  html=html)
+    mail.send(msg)
+    flash('A new confirmation email has been sent.', 'success')
+    return redirect(url_for('auth.unconfirmed'))
+
 # Route for logging out
 @auth.route('/logout')
 @login_required

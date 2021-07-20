@@ -1,6 +1,7 @@
 # Import necessary modules
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_app import app, db
+from flask_app.decorators import check_confirmed
 from flask_app.models import *
 from flask_login import login_required, current_user
 from sqlalchemy import or_, and_, func
@@ -572,6 +573,7 @@ def organization(orgName):
 # Route for profile page
 @main.route('/profile', methods=['GET', 'POST'])
 @login_required
+@check_confirmed
 def profile():
 
     # Logic for unfavoriting the org
