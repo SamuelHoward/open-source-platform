@@ -614,26 +614,27 @@ def profile():
         # Refresh the page after unfavoriting
         return redirect(request.path)
 
-    #
+    # Find project favorites for current user
     favProjs=Favorites.query.filter(
         and_(Favorites.user_id==current_user.id,
              Favorites.fav_type=='project')) \
                             .with_entities(
                                 Favorites.fav_name)
 
-    #
+    # Find favorite projects
     projects=db.session.query(Projects).filter(Projects.name.in_(favProjs))
 
-    #
+    # Find organization favorites for current user
     favOrgs=Favorites.query.filter(
         and_(Favorites.user_id==current_user.id,
              Favorites.fav_type=='org')) \
                            .with_entities(
                                Favorites.fav_name)
 
-    #
-    organizations=db.session.query(Organizations).filter(Organizations.name.in_(favOrgs))
-    
+    # Find favorite organizations
+    organizations=db.session.query(
+        Organizations).filter(Organizations.name.in_(favOrgs))
+
     # Render the profile for a logged in user
     return render_template('profile.html',
                            name=current_user.name,

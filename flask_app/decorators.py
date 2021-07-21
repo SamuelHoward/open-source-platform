@@ -2,7 +2,7 @@ from functools import wraps
 from flask_login import current_user
 from flask import flash, redirect, url_for
 
-
+# Wrapper used for checking current user is confirmed
 def check_confirmed(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):

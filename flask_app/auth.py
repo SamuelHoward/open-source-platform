@@ -24,7 +24,6 @@ app.config.update(
     MAIL_SERVER='smtp.gmail.com',
     MAIL_DEFAULT_SENDER= \
     '"TheOpenSourcePlatform" <theopensourceplatform@gmail.com>')
-
 mail = Mail(app)
 
 # Route for logging in
@@ -107,6 +106,7 @@ def signup():
             password=generate_password_hash(password, method='sha256'),
             confirmed=False)
 
+        # Generate the user's token and create the email content
         token = generate_confirmation_token(email)
         confirm_url = url_for('auth.confirm_email', token=token, _external=True)
         html = render_template('activate.html', confirm_url=confirm_url)
@@ -134,37 +134,60 @@ def signup():
     else:
         return render_template('signup.html', title='OSP | Sign up')
 
-
+# Route used for confirming account using token emailed to user
 @auth.route('/confirm/<token>')
 @login_required
 def confirm_email(token):
+
+    # Attempt to confirm the token and retrieve the email used to generate it
     try:
         email = confirm_token(token)
+
+    # If the token fails to be confirmed, report it to the user
     except:
         flash('The confirmation link is invalid or has expired.', 'danger')
+
+    # Find user by the email taken from token
     user = Users.query.filter_by(email=email).first_or_404()
+
+    # If the email is already confirmed, report it to the user
     if user.confirmed:
-        flash('Account already confirmed. Please login.', 'success')
+        flash('Account already confirmed.', 'success')
+
+    # If the email is not already confirmed, confirm it
     else:
         user.confirmed = True
-        user.confirmed_on = datetime.datetime.now()
         db.session.add(user)
         db.session.commit()
-        flash('You have confirmed your account. Thanks!', 'success')
+        flash('Account confirmed. Thanks!', 'success')
+
+    # redirect to main profile
     return redirect(url_for('main.profile'))
 
+# Route for the unconfirmed user webpage
 @auth.route('/unconfirmed')
 @login_required
 def unconfirmed():
+
+    # If user is confirmed, redirect to the homepage
     if current_user.confirmed:
         return redirect(url_for('index'))
+
+    # Prompt the user to confirm their account
     flash('Please confirm your account!', 'warning')
+
+    # Render the unconfirmed webpage
     return render_template('unconfirmed.html')
 
+# Route for resending a confirmation token
 @auth.route('/resend')
 @login_required
 def resend_confirmation():
+
+    # Generate a new token using the user's email
     token = generate_confirmation_token(current_user.email)
+
+    # Generate the email message and send it
     confirm_url = url_for('auth.confirm_email', token=token, _external=True)
     html = render_template('activate.html', confirm_url=confirm_url)
     subject = "Please confirm your email"
@@ -172,7 +195,11 @@ def resend_confirmation():
                   recipients=[current_user.email],
                   html=html)
     mail.send(msg)
+
+    # Inform the user that a confirmation email has been sent
     flash('A new confirmation email has been sent.', 'success')
+
+    # Redirect to the unconfirmed webpage
     return redirect(url_for('auth.unconfirmed'))
 
 # Route for logging out
