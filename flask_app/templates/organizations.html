@@ -64,11 +64,13 @@
       {% endif %}
       {% endif %}
       <ul>
-      {% for project in projects %}
-      {% if project.owner == organization.name %}
-      <li><a href={{ project.url }}>{{ project.name }}</a></li>
-      {% endif %}
-      {% endfor %}
+	{% set count = namespace(value=0) %}
+	{% for project in projects %}
+	{% if project.owner == organization.name and count.value < 5 %}
+	<li><a href={{ project.url }}>{{ project.name }}</a></li>
+	{% set count.value = count.value + 1 %}
+	{% endif %}
+	{% endfor %}
       </ul>
     </div>
   </div>
