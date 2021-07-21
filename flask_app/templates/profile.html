@@ -5,8 +5,6 @@
   Welcome, {{ name }}!
 </h2>
 
-{{ current_user.confirmed }}
-
 {% with messages = get_flashed_messages() %}
 {% if messages %}
 <div class="notification is-danger">
