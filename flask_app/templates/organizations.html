@@ -71,6 +71,11 @@
 	{% set count.value = count.value + 1 %}
 	{% endif %}
 	{% endfor %}
+	{% if count.value == 5 %}
+
+	<a href={{ url_for('organization', orgName=organization.name)}}>...</a>
+	
+	{% endif %}
       </ul>
     </div>
   </div>
