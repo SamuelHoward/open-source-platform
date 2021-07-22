@@ -25,6 +25,10 @@ div {
     margin-left: 8px;
 }
 
+.fa-custom {
+    vertical-align: -33%
+}
+
 .card_break {
     clear:both;
 }
