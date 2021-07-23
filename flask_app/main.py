@@ -77,12 +77,14 @@ def projects():
             # Logic for standard recent search
             if 'reverse' in request.form:
                 projects_search_results_data = projects_search_results_data \
+                                               .filter(Projects.source == 'github') \
                                                .order_by(func.date(
                                                    Projects.created_time))
 
             # Logic for reverse recent search
             else:
                 projects_search_results_data = projects_search_results_data \
+                                               .filter(Projects.source == 'github') \
                                                .order_by(func.date(
                                                    Projects \
                                                    .created_time).desc())
@@ -93,11 +95,13 @@ def projects():
             # Logic for sorting items by fork count, least first
             if 'reverse' in request.form:
                 projects_search_results_data = projects_search_results_data \
+                                               .filter(Projects.source == 'github') \
                                                .order_by(Projects.forks)
 
             # Logic for sorting items by fork count, greatest first
             else:
                 projects_search_results_data = projects_search_results_data \
+                                               .filter(Projects.source == 'github') \
                                                .order_by(Projects.forks.desc())
 
         # Logic for sorting items by number of watchers
@@ -107,11 +111,13 @@ def projects():
             # Logic for sorting items by watcher count, least first
             if 'reverse' in request.form:
                 projects_search_results_data = projects_search_results_data \
+                                               .filter(Projects.source == 'github') \
                                                .order_by(Projects.watchers)
 
             # Logic for sorting items by watcher count, greatest first
             else:
                 projects_search_results_data = projects_search_results_data \
+                                               .filter(Projects.source == 'github') \
                                                .order_by(
                                                    Projects.watchers.desc())
 
@@ -122,18 +128,49 @@ def projects():
             # Logic for sorting items by issues count, least first
             if 'reverse' in request.form:
                 projects_search_results_data = projects_search_results_data \
+                                               .filter(Projects.source == 'github') \
                                                .order_by(
                                                    Projects.open_issues)
 
             # Logic for sorting items by issues count, greatest first
             else:
                 projects_search_results_data = projects_search_results_data \
+                                               .filter(Projects.source == 'github') \
                                                .order_by(
                                                    Projects \
                                                    .open_issues.desc())
 
         # Refresh the page after searching
-        return redirect(request.path)
+        # return redirect(request.path)
+        
+        try:
+            
+            # Render the page for logged-in users
+            return render_template(
+                'projects_search.html',
+                search_results=projects_search_results_data.paginate(
+                    page=page,
+                    per_page=projectsPerPage),
+                search_term=proj_search_term,
+                title='OSP | Projects',
+                favorites=Favorites.query.filter(
+                    and_(Favorites.user_id==current_user.id,
+                         Favorites.fav_type=='project')) \
+                .with_entities(
+                    Favorites.fav_name))
+
+        # If the previous rendering fails, default to anonymous rendering
+        except:
+
+            # Render the page for anonymous users
+            return render_template(
+                'projects_search.html',
+                search_results=projects_search_results_data.paginate(
+                    page=page,
+                    per_page=projectsPerPage),
+                search_term=proj_search_term,
+                title='OSP | Projects',
+                favorites=[])
 
     # Logic for favoriting a project
     elif request.method == 'POST' and 'fav_name' in request.form:
@@ -254,8 +291,38 @@ def organizations():
                     Organizations.name)
 
         # Refresh the page after search
-        return redirect(request.path)
+        # return redirect(request.path)
 
+        try:
+
+            # Render page for logged-in users
+            return render_template(
+                'organizations.html',
+                search_results=orgs_search_results_data.paginate(
+                    page=page,
+                    per_page=orgsPerPage),
+                search_term=org_search_term,
+                projects=Projects.query.all(),
+                title='OSP | Organizations',
+                favorites=Favorites.query.filter(
+                    and_(Favorites.user_id==current_user.id,
+                         Favorites.fav_type=='org')) \
+                .with_entities(Favorites.fav_name))
+
+        # If the above rendering fails, render the anonymous page
+        except:
+
+            #Render page for anonymous users
+            return render_template(
+                'organizations.html',
+                search_results=orgs_search_results_data.paginate(
+                    page=page,
+                    per_page=orgsPerPage),
+                search_term=org_search_term,
+                projects=Projects.query.all(),
+                title='OSP | Organizations',
+                favorites=[])
+        
     # Logic for favoriting an org
     if request.method == 'POST' and 'fav_name' in request.form:
 
