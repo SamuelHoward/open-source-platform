@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Manage your Profile Details</h2>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="notification is-danger">
+  {{ messages[0] }}
+</div>
+{% endif %}
+{% endwith %}
+
+<br>
+
+<h3>Name: {{current_user.name}}</h3>
+
+Change your Name:
+<form method="POST">
+  <input class="search" type="text" name="name_change" placeholder="New Name">
+  <button type="submit" name="name_change" value="name_change">Submit</button>
+</form>
+
+<br>
+
+<h3>Email: {{current_user.email}}</h3>
+Email Confirmation Status:
+{% if current_user.confirmed %}
+<i class="fa fa-check"></i>
+{% else %}
+<i class="fa fa-times"></i>
+{% endif %}
+<br>
+Changing your email will require further confirmation.
+<br>
+Change your Email:
+<form method="POST">
+  <input class="search" type="email" name="email_change" placeholder="New Email">
+  <button type="submit" name="email_change" value="email_change">Submit</button>
+</form>
+
+<br>
+
+<h3>Change your Password</h3>
+
+<form method="POST">
+  <input class="search" type="text" name="password_old" placeholder="Old Password"> <br>
+  <input class="search" type="text" name="password_change" placeholder="New Password">
+  <button type="submit" name="password_change" value="password_change">Submit</button>
+</form>
+
+{% endblock %}

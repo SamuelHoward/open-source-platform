@@ -202,6 +202,97 @@ def resend_confirmation():
     # Redirect to the unconfirmed webpage
     return redirect(url_for('auth.unconfirmed'))
 
+# Route for managing profile details
+@auth.route('/manage', methods=['GET', 'POST'])
+@login_required
+def manage():
+
+    # Logic for changing a user's name
+    if request.method == 'POST'  and 'name_change' in request.form:
+
+        # Get the new name from the form
+        name = request.form.get('name_change')
+
+        # Update the current user's name
+        user = current_user
+        user.name = name
+        db.session.add(user)
+        db.session.commit()
+    
+        # flash name change message
+        flash('Name changed to ' + name)
+        
+        # Load the manage page
+        return redirect(url_for('auth.manage'))
+
+    elif request.method == 'POST'  and 'email_change' in request.form:
+
+        # Get the data from the form
+        email = request.form.get('email_change')
+
+        # Check if the user's email already belongs to an account
+        q = db.session.query(Users.id).filter(Users.email==email)
+
+        # If the user's email exists, email change fails
+        if db.session.query(q.exists()).scalar():
+            flash('Email address already exists')
+            return redirect(url_for('auth.manage'))
+
+        # Generate the user's token and create the email content
+        token = generate_confirmation_token(email)
+        confirm_url = url_for('auth.confirm_email', token=token, _external=True)
+        html = render_template('activate.html', confirm_url=confirm_url)
+        
+        # Update the current user's email
+        user = current_user
+        user.email = email
+        user.confirmed = False
+        db.session.add(user)
+        db.session.commit()
+
+        # Craft the confirmation email and send it
+        msg = Message("Open Source Platform | Email Change",
+                      recipients=[email],
+                      html=html)
+        mail.send(msg)
+
+        # flash sign up message
+        flash('Email changed to ' + email + ', please use the link sent ' + \
+              'to this email to confirm your account.')
+        
+        # Load the manage page
+        return redirect(url_for('auth.manage'))
+
+    elif request.method == 'POST'  and 'password_change' in request.form:
+
+        # Get the old and new password from the form
+        old_pass = request.form.get('password_old')
+        new_pass = request.form.get('password_change')
+
+        # If the password is incorrect, authentication fails
+        if not check_password_hash(current_user.password, old_pass):
+            
+            # Inform the user that their login has failed
+            flash('Please check your previous password and try again.')
+            return redirect(url_for('auth.manage'))
+        
+        # Update the current user's password
+        user = current_user
+        password = generate_password_hash(new_pass, method='sha256')
+        user.password = password
+        db.session.add(user)
+        db.session.commit()
+    
+        # flash name change message
+        flash('Password Updated')
+        
+        # Load the manage page
+        return redirect(url_for('auth.manage'))
+        
+    # Render the management webpage
+    else:
+        return render_template('manage.html')
+
 # Route for logging out
 @auth.route('/logout')
 @login_required
