@@ -241,7 +241,7 @@ def manage():
         # Generate the user's token and create the email content
         token = generate_confirmation_token(email)
         confirm_url = url_for('auth.confirm_email', token=token, _external=True)
-        html = render_template('activate.html', confirm_url=confirm_url)
+        html = render_template('email_change.html', confirm_url=confirm_url)
         
         # Update the current user's email
         user = current_user
