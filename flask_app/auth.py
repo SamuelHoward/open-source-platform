@@ -177,7 +177,7 @@ def unconfirmed():
     flash('Please confirm your account!', 'warning')
 
     # Render the unconfirmed webpage
-    return render_template('unconfirmed.html')
+    return render_template('unconfirmed.html', title='OSP | Please Confirm')
 
 # Route for resending a confirmation token
 @auth.route('/resend')
@@ -291,7 +291,7 @@ def manage():
         
     # Render the management webpage
     else:
-        return render_template('manage.html')
+        return render_template('manage.html', title='OSP | Account Management')
 
 # Route for logging out
 @auth.route('/logout')
