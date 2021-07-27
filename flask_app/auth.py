@@ -8,9 +8,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message, Mail
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 import random
 import os
-import datetime
 
 # This files includes all the routes for authentication
 auth = Blueprint('auth', __name__)
@@ -104,6 +104,7 @@ def signup():
             email=email,
             name=name,
             password=generate_password_hash(password, method='sha256'),
+            created_on=datetime.now(),
             confirmed=False)
 
         # Generate the user's token and create the email content
@@ -157,6 +158,7 @@ def confirm_email(token):
     # If the email is not already confirmed, confirm it
     else:
         user.confirmed = True
+        user.confirmed_on = datetime.now(),
         db.session.add(user)
         db.session.commit()
         flash('Account confirmed. Thanks!', 'success')

@@ -1,5 +1,6 @@
 from flask_app import db
 from flask_login import UserMixin
+import datetime
 
 class Projects(db.Model):
 
@@ -37,7 +38,8 @@ class Users(UserMixin, db.Model):
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
-    # confirmed_on = db.Column(db.DateTime, nullable=True)
+    confirmed_on = db.Column(db.DateTime, nullable=True)
+    created_on = db.Column(db.DateTime, nullable=True)
     
 class Favorites(db.Model):
 
