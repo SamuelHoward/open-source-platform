@@ -30,6 +30,10 @@ Email Confirmation Status:
 {% else %}
 <i class="fa fa-times"></i>
 {% endif %}
+{% if current_user.confirmed and current_user.confirmed_on is not none %}
+<br>
+Email confirmed on {{ current_user.confirmed_on.strftime('%Y-%m-%d') }}
+{% endif %}
 <br>
 Changing your email will require further confirmation.
 <br>
