@@ -25,8 +25,15 @@ orgsPerPage = 25
 @app.route('/index')
 def index():
 
+    # Calculate amount of projects
+    projsLength = Projects.query.count()
+
+    # Calculate amount of organizations
+    orgsLength = Organizations.query.count()
+    
     # Return the static homepage
-    return render_template('index.html', title='Open Source Platform')
+    return render_template(
+        'index.html', title='Open Source Platform', numProjs=projsLength, numOrgs=orgsLength)
 
 # Route for projects page, includes searching and favoriting projects
 @app.route('/projects', methods=['GET', 'POST'])
