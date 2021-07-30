@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block content %}
 
 <h2>
@@ -132,11 +133,18 @@ Account created on {{ current_user.created_on.strftime('%Y-%m-%d') }}
       {% endif %}
       {% endif %}
       <ul>
+	
+	{% set count = namespace(value=0) %}
 	{% for project in subProjects %}
-	{% if project.owner == organization.name %}
+	{% if project.owner == organization.name and count.value < 5 %}
 	<li><a href={{ project.url }}>{{ project.name }}</a></li>
+	{% set count.value = count.value + 1 %}
 	{% endif %}
 	{% endfor %}
+	{% if count.value == 5 %}
+	<a href={{ url_for('organization', orgName=organization.name)}}>...</a>
+	{% endif %}
+	
       </ul>
     </div>
   </div>
