@@ -147,9 +147,10 @@ def projects():
                                                    Projects \
                                                    .open_issues.desc())
 
+        # Reset the page after search
+        page = 1
+                
         # Refresh the page after searching
-        # return redirect(request.path)
-        
         try:
             
             # Render the page for logged-in users
@@ -297,9 +298,10 @@ def organizations():
                 orgs_search_results_data = orgs_search_results_data.order_by(
                     Organizations.name)
 
+        # Reset the page after search
+        page = 1
+                
         # Refresh the page after search
-        # return redirect(request.path)
-
         try:
 
             # Render page for logged-in users
