@@ -6,6 +6,7 @@ from flask_app.models import *
 from flask_login import login_required, current_user
 from sqlalchemy import or_, and_, func
 import random
+import requests
 
 # This file includes all main routes (no login related routes)
 main = Blueprint('main', __name__)
@@ -727,6 +728,51 @@ def profile():
                                Favorites.user_id==current_user.id),
                            subProjects=Projects.query.all())
 
+
+# Route for submitting projects
+@main.route('/project-submit', methods=['GET', 'POST'])
+@login_required
+@check_confirmed
+def project_submit():
+
+    # Logic for submitting github project
+    if request.method == 'POST':
+        
+        # Pull in submit term from form
+        submit_term = request.form['submit_term']
+        
+        # Use github api to access user's project
+        item = requests.get(
+            "https://api.github.com/repos/" + submit_term).json()
+
+        # Create the new Project record
+        new_proj = Projects(
+            name = item["name"],
+            url = item["html_url"],
+            description = item["description"],
+            source = "github",
+            owner = item["owner"]["login"],
+            owner_avatar = item["owner"]["avatar_url"],
+            language = item["language"],
+            created_time = item["created_at"],
+            last_updated = item["updated_at"],
+            forks = item["forks"],
+            watchers = item["watchers"],
+            open_issues = item["open_issues"],
+            owner_type = item["owner"]["type"])
+        
+        # Add the project and commit
+        db.session.add(new_proj)
+        db.session.commit()
+
+        # flash name change message
+        flash('Project Added!')
+
+        # Load the manage page
+        return redirect(url_for('main.project_submit'))
+        
+    # Render project submit page
+    return render_template('project-submit.html', title='OSP | Project Submit')
 
 # Route for 404 page
 @app.errorhandler(404)
