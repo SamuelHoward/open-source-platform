@@ -745,6 +745,19 @@ def project_submit():
         item = requests.get(
             "https://api.github.com/repos/" + submit_term).json()
 
+        # Check if project was found
+        if "name" not in item:
+            flash('Project not found on github')
+            return redirect(url_for('main.project_submit'))
+        
+        # Check if project is already in database
+        q = db.session.query(Projects.name).filter(Projects.name==item["name"])
+
+        # If the project exists, do not add it again
+        if db.session.query(q.exists()).scalar():
+            flash('Project already exists in database')
+            return redirect(url_for('project', projectName=item["name"]))
+        
         # Create the new Project record
         new_proj = Projects(
             name = item["name"],
@@ -760,11 +773,29 @@ def project_submit():
             watchers = item["watchers"],
             open_issues = item["open_issues"],
             owner_type = item["owner"]["type"])
-        
+            
         # Add the project and commit
         db.session.add(new_proj)
         db.session.commit()
 
+        # Check if org is already in database
+        q = db.session.query(Organizations.name).filter(
+            Organizations.name==item["owner"]["login"])
+        
+        # If the organization exists, do not add it again
+        if not db.session.query(q.exists()).scalar():
+
+            # Create the new Project record
+            new_org = Organizations(
+                name = item["owner"]["login"],
+                avatar = item["owner"]["avatar_url"],
+                owner_type = item["owner"]["type"],
+                url = "https://github.com/" + item["owner"]["login"])
+
+            # Add the org and commit
+            db.session.add(new_org)
+            db.session.commit()
+        
         # flash name change message
         flash('Project Added!')
 
