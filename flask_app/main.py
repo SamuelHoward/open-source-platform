@@ -795,9 +795,13 @@ def project_submit():
             # Add the org and commit
             db.session.add(new_org)
             db.session.commit()
-        
-        # flash name change message
-        flash('Project Added!')
+
+            # flash project and org added message
+            flash('Project and Organization Added!')
+            
+        else:
+            # flash project added message
+            flash('Project Added!')
 
         # Load the manage page
         return redirect(url_for('main.project_submit'))
