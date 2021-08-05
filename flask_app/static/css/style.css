@@ -25,6 +25,10 @@ div {
     margin-left: 8px;
 }
 
+ul {
+    margin-block-start: 0.5em;
+}
+
 .fa-custom {
     vertical-align: -33%
 }
