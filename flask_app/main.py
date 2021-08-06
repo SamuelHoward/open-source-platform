@@ -18,8 +18,8 @@ projects_search_results_data = Projects.query.filter(
     Projects.description.contains(""))
 proj_search_term = None
 org_search_term = None
-projectsPerPage = 25
-orgsPerPage = 25
+projectsPerPage = 10
+orgsPerPage = 10
 
 # Route for home page
 @app.route('/')
@@ -301,18 +301,25 @@ def organizations():
 
         # Reset the page after search
         page = 1
-                
+
+        # Calculate search results and org names
+        search_results=orgs_search_results_data.paginate(
+                    page=page,
+                    per_page=orgsPerPage)
+        orgNames = [item.name for item in search_results.items]
+        
+        # Find the projects whose owners are in the search results
+        projects=Projects.query.filter(Projects.owner.in_(orgNames))
+        
         # Refresh the page after search
         try:
 
             # Render page for logged-in users
             return render_template(
                 'organizations.html',
-                search_results=orgs_search_results_data.paginate(
-                    page=page,
-                    per_page=orgsPerPage),
+                search_results=search_results,
                 search_term=org_search_term,
-                projects=Projects.query.all(),
+                projects=projects,
                 title='OSP | Organizations',
                 favorites=Favorites.query.filter(
                     and_(Favorites.user_id==current_user.id,
@@ -325,11 +332,9 @@ def organizations():
             #Render page for anonymous users
             return render_template(
                 'organizations.html',
-                search_results=orgs_search_results_data.paginate(
-                    page=page,
-                    per_page=orgsPerPage),
+                search_results=search_results,
                 search_term=org_search_term,
-                projects=Projects.query.all(),
+                projects=projects,
                 title='OSP | Organizations',
                 favorites=[])
         
@@ -383,16 +388,24 @@ def organizations():
 
     # Render the page for logged-in users and anonymous users
     else:
+
+        # Calculate search results and org names
+        search_results=orgs_search_results_data.paginate(
+                    page=page,
+                    per_page=orgsPerPage)
+        orgNames = [item.name for item in search_results.items]
+        
+        # Find the projects whose owners are in the search results
+        projects=Projects.query.filter(Projects.owner.in_(orgNames))
+        
         try:
 
             # Render page for logged-in users
             return render_template(
                 'organizations.html',
-                search_results=orgs_search_results_data.paginate(
-                    page=page,
-                    per_page=orgsPerPage),
+                search_results=search_results,
                 search_term=org_search_term,
-                projects=Projects.query.all(),
+                projects=projects,
                 title='OSP | Organizations',
                 favorites=Favorites.query.filter(
                     and_(Favorites.user_id==current_user.id,
@@ -405,11 +418,9 @@ def organizations():
             #Render page for anonymous users
             return render_template(
                 'organizations.html',
-                search_results=orgs_search_results_data.paginate(
-                    page=page,
-                    per_page=orgsPerPage),
+                search_results=search_results,
                 search_term=org_search_term,
-                projects=Projects.query.all(),
+                projects=projects,
                 title='OSP | Organizations',
                 favorites=[])
 
@@ -468,7 +479,7 @@ def project(projectName):
     # Try to render the page for this project
     try:
 
-        # Retrieve the date for the project page
+        # Retrieve the data for the project page
         proj = Projects.query.filter(Projects.name==projectName).one()
         orgName = Organizations.query.filter(
             Organizations.name==proj.owner).one()
