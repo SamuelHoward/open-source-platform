@@ -64,6 +64,10 @@ def login():
             # Flash login message
             flash('Successfully logged in')
             
+            # If 'next' is present in url, go to that url
+            if 'next' in request.args:
+                return redirect(request.args.get('next'))
+            
             # Load the user's profile page
             return redirect(url_for('main.profile'))
 
