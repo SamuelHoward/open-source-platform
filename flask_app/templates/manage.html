@@ -11,8 +11,6 @@
 {% endif %}
 {% endwith %}
 
-<br>
-
 <h3>Name: {{current_user.name}}</h3>
 
 Change your Name:
@@ -52,5 +50,18 @@ Change your Email:
   <input class="search" type="text" name="password_change" placeholder="New Password">
   <button type="submit" name="password_change" value="password_change">Submit</button>
 </form>
+
+<br>
+
+<h3>Delete your Account</h3>
+
+If you would like to delete your account, including your profile information and favorites, click the button below and confirm you would like to delete your account.
+
+<br>
+<br>
+
+<a href= {{ url_for('auth.delete') }}>Delete your account</a>
+
+<br>
 
 {% endblock %}

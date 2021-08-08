@@ -299,6 +299,32 @@ def manage():
     else:
         return render_template('manage.html', title='OSP | Account Management')
 
+# Route for deleting your account
+@auth.route('/delete', methods=['GET', 'POST'])
+@login_required
+def delete():
+
+    # Logic for deleting a user
+    if request.method == 'POST'  and 'delete' in request.form:
+
+        # Delete the user's favorites
+        Favorites.query.filter(Favorites.user_id == current_user.id).delete()
+
+        # Delete the user
+        Users.query.filter(Users.id == current_user.id).delete()
+        db.session.commit()
+        
+        # Log out the user and return to homepage
+        logout_user()
+
+        # Flash log out message
+        flash('Successfully deleted account')
+    
+        return redirect(url_for('index'))
+        
+    # Render the account deletion webpage
+    return render_template('delete.html', title='OSP | Delete your Account')
+    
 # Route for logging out
 @auth.route('/logout')
 @login_required
