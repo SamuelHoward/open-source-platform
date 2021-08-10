@@ -7,6 +7,7 @@ from flask_app.models import *
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message, Mail
+from flask_app.decorators import check_confirmed
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import random
@@ -139,6 +140,47 @@ def signup():
     else:
         return render_template('signup.html', title='OSP | Sign up')
 
+# Route for sending a password reset email
+@auth.route('/password-reset-email', methods=['GET', 'POST'])
+def password_reset_email():
+
+    # Logic for signing up a user
+    if request.method == 'POST':
+
+        # Get the data from the form
+        email = request.form.get('email')
+
+        # Check if the user's email already belongs to an account
+        q = db.session.query(Users.id).filter(Users.email==email)
+
+        # If the user's email exists, password reset fails
+        if not db.session.query(q.exists()).scalar():
+            flash('Email address does not exist')
+            return redirect(url_for('auth.signup'))
+
+        # Generate a new token using the user's email
+        token = generate_confirmation_token(email)
+
+        # Generate the email message and send it
+        confirm_url = url_for('auth.forgot_password', token=token, _external=True)
+        html = render_template('reset.html', confirm_url=confirm_url)
+        subject = "Link for Resetting your Password"
+        msg = Message("Open Source Platform | Password Reset",
+                      recipients=[email],
+                      html=html)
+        mail.send(msg)
+
+        # Inform the user that a confirmation email has been sent
+        flash('A password reset email has been sent.', 'success')
+
+        # Redirect to the unconfirmed webpage
+        return redirect(url_for('auth.password_reset_email'))
+        
+    # Render the signup page
+    else:
+        return render_template('password_reset_email.html',
+                               title='OSP | Email Password Reset')
+    
 # Route used for confirming account using token emailed to user
 @auth.route('/confirm/<token>')
 @login_required
@@ -169,6 +211,61 @@ def confirm_email(token):
 
     # redirect to main profile
     return redirect(url_for('main.profile'))
+
+# Route used for handling forgetting a password
+@auth.route('/forgot-password/<token>')
+def forgot_password(token):
+
+    # Attempt to confirm the token and retrieve the email used to generate it
+    try:
+        email = confirm_token(token)
+
+    # If the token fails to be confirmed, report it to the user
+    except:
+        flash('The "forgot password" link is invalid or has expired.', 'danger')
+
+    # Find user by the email taken from token
+    user = Users.query.filter_by(email=email).first_or_404()
+
+    # If the email is not confirmed, the user may not reset their password
+    if not user.confirmed:
+        flash('Account must be confirmed in order to reset password.', 'danger')
+        return redirect(url_for('auth.login'))
+
+    # Login the user
+    login_user(user)
+    
+    # redirect to reset password
+    return redirect(url_for('auth.reset_password'))
+
+# Route for resetting a password
+@auth.route('/reset_password', methods=['GET', 'POST'])
+@login_required
+@check_confirmed
+def reset_password():
+
+    # Logic for changing a user's password
+    if request.method == 'POST'  and 'password_change' in request.form:
+
+        # Get the old and new password from the form
+        new_pass = request.form.get('password_change')
+
+        # Update the current user's password
+        user = current_user
+        password = generate_password_hash(new_pass, method='sha256')
+        user.password = password
+        db.session.add(user)
+        db.session.commit()
+    
+        # flash name change message
+        flash('Password Reset')
+        
+        # Load the manage page
+        return redirect(url_for('main.profile'))
+        
+    # Render the password reset page
+    else:
+        return render_template('reset_password.html', title='OSP | Reset Password')
 
 # Route for the unconfirmed user webpage
 @auth.route('/unconfirmed')
