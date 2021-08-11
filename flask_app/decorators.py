@@ -12,3 +12,15 @@ def check_confirmed(func):
         return func(*args, **kwargs)
     
     return decorated_function
+
+# Wrapper used for checking current user can reset their password
+# without old password
+def check_reset(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if current_user.reset is False:
+            flash('Logged in users must reset their password via account management', 'warning')
+            return redirect(url_for('auth.manage'))
+        return func(*args, **kwargs)
+    
+    return decorated_function

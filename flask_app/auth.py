@@ -7,7 +7,7 @@ from flask_app.models import *
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message, Mail
-from flask_app.decorators import check_confirmed
+from flask_app.decorators import check_confirmed, check_reset
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import random
@@ -61,7 +61,7 @@ def login():
 
             # Login the user
             login_user(user)
-            
+
             # Flash login message
             flash('Successfully logged in')
             
@@ -227,6 +227,11 @@ def forgot_password(token):
     # Find user by the email taken from token
     user = Users.query.filter_by(email=email).first_or_404()
 
+    # Allow the user to reset via the reset_password route
+    user.reset = True
+    db.session.add(user)
+    db.session.commit()
+    
     # If the email is not confirmed, the user may not reset their password
     if not user.confirmed:
         flash('Account must be confirmed in order to reset password.', 'danger')
@@ -242,6 +247,7 @@ def forgot_password(token):
 @auth.route('/reset_password', methods=['GET', 'POST'])
 @login_required
 @check_confirmed
+@check_reset
 def reset_password():
 
     # Logic for changing a user's password
@@ -254,9 +260,10 @@ def reset_password():
         user = current_user
         password = generate_password_hash(new_pass, method='sha256')
         user.password = password
+        user.reset = False
         db.session.add(user)
         db.session.commit()
-    
+        
         # flash name change message
         flash('Password Reset')
         
