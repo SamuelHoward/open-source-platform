@@ -789,6 +789,20 @@ def project_submit():
         db.session.add(new_proj)
         db.session.commit()
 
+        # Logic for sorting items by name
+        if 'fav' in request.form:
+
+            # Create the Favorites record
+            new_fav = Favorites(
+                id=random.randint(-2147483648, 2147483647),
+                user_id=current_user.id,
+                fav_name=item["name"],
+                fav_type='project')
+            
+            # Add the favorite and commit it
+            db.session.add(new_fav)
+            db.session.commit()
+            
         # Check if org is already in database
         q = db.session.query(Organizations.name).filter(
             Organizations.name==item["owner"]["login"])
