@@ -789,8 +789,8 @@ def project_submit():
         db.session.add(new_proj)
         db.session.commit()
 
-        # Logic for sorting items by name
-        if 'fav' in request.form:
+        # Logic for adding favorite project
+        if 'favProj' in request.form:
 
             # Create the Favorites record
             new_fav = Favorites(
@@ -828,6 +828,20 @@ def project_submit():
             # flash project added message
             flash('Project Added!')
 
+        # Logic for adding favorite org
+        if 'favOrg' in request.form:
+
+            # Create the Favorites record
+            new_fav = Favorites(
+                id=random.randint(-2147483648, 2147483647),
+                user_id=current_user.id,
+                fav_name=item["owner"]["login"],
+                fav_type='org')
+            
+            # Add the favorite and commit it
+            db.session.add(new_fav)
+            db.session.commit()
+            
         # Load the manage page
         return redirect(url_for('main.project_submit'))
         
